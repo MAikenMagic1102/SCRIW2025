@@ -15,16 +15,16 @@ public class Elevator extends SubsystemBase{
     private double cmElevatorZero = ElevatorConstants.cmElevatorZero;
 
     // Get motor rotations
-    private StatusSignal<Angle> motorLeftRot = m_motorLeft.getPosition();
-    private StatusSignal<Angle> motorRightRot = m_motorRight.getPosition();
+    private double motorLeftRot = m_motorLeft.getPosition().getValueAsDouble();
+    private double motorRightRot = m_motorRight.getPosition().getValueAsDouble();
 
     final DutyCycleOut m_dutyLeft = new DutyCycleOut(0.0);
     final DutyCycleOut m_dutyRight = new DutyCycleOut(0.0);
 
     
     private double positionError;
-   
-    private double acceptableError = 0.05;
+    private double acceptableError = ElevatorConstants.errorRange;
+    
 
     private void sendElevatorToPoint(double point){
         positionError = getError(point);
@@ -44,6 +44,9 @@ public class Elevator extends SubsystemBase{
         while(!withinError){
             m_motorLeft.setControl(m_dutyLeft.withOutput(motorPercent));
             m_motorRight.setControl(m_dutyRight.withOutput(motorPercent));
+            
+            positionError = getError(point);
+            withinError = acceptableErrorLower < positionError && positionError < acceptableErrorUpper;
         };
     };
 
@@ -51,21 +54,44 @@ public class Elevator extends SubsystemBase{
        sendElevatorToPoint(ElevatorConstants.ElevatorSetpoints.elevatorGroundIntake);
     };
 
-    public void elevatorLowerReef() {};
+    public void elevatorLowerReef() {
+        sendElevatorToPoint(ElevatorConstants.ElevatorSetpoints.elevatorLowerReef);
+    };
 
-    public void elevatorUpperReef() {};
+    public void elevatorUpperReef() {
+        sendElevatorToPoint(ElevatorConstants.ElevatorSetpoints.elevatorLowerReef);
+    };
 
-    public void elevatorHome() {};
+    public void elevatorHome() {
+        sendElevatorToPoint(ElevatorConstants.ElevatorSetpoints.elevatorHome);
+    };
 
-    public void elevatorScoreBarge() {};
+    public void elevatorScoreBarge() {
+        sendElevatorToPoint(ElevatorConstants.ElevatorSetpoints.elevatorscore);
+    };
+
+    public void elevatorTester() {
+
+    };
+
+    public double getRotLeft() {
+        motorLeftRot = m_motorLeft.getPosition().getValueAsDouble();
+        return motorLeftRot;
+    };
+
+    public double getRotRight() {
+        motorRightRot = m_motorRight.getPosition().getValueAsDouble();
+        return motorRightRot;
+    };
     
     private double getElevatorHeight(){
         // TODO: FLESH OUT! FIGURE OUT LEAD MOTOR!
-        double elevatorHeight = cmPerRot * motorLeftRot.getValueAsDouble() + cmElevatorZero;
+        double elevatorHeight = cmPerRot * motorLeftRot + cmElevatorZero;
         return elevatorHeight;
         // Will return the result of our equation defining elevator height based on rotations.
         //TODO: Get elevator height equation. Zero is ABOUT 36 inches. Need to confirm.
     };
+
 
     private double getError(double setpoint){
         // Return error between current height and desired position

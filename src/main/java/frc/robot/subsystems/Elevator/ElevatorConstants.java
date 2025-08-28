@@ -22,6 +22,9 @@ private final TalonFXSimState rightSim = m_motorRight.getSimState();
 public static final double cmPerRot = 0;
 public static final double cmElevatorZero = 0;
 
+public static final double errorRange = 0.05;
+
+
 public static final class ElevatorSetpoints {
     public static final double barge = 0;
     public static final double processor = 0;
