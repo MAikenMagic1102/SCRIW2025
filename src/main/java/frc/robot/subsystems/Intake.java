@@ -13,8 +13,8 @@ public class Intake {
     
 
     public Intake(){
-        intakeRoller = new TalonFX(0);
-        intakeSensor = new  DigitalInput(0);
+        intakeRoller = new TalonFX(IntakeConstants.m_intakeMotor);
+        intakeSensor = new  DigitalInput(IntakeConstants.intakeSensor);
         TalonFXConfiguration intakeConfiguration = new TalonFXConfiguration();
         
     }
@@ -24,22 +24,25 @@ public class Intake {
 
     public void intakeIn(){
         if(!intakeSensor.get()){
-            intakeRoller.set(0);
+            intakeRoller.set(IntakeConstants.IntakeSpeeds.intakeIn);
         }else{
-            intakeRoller.set(0);
+            intakeRoller.set(IntakeConstants.IntakeSpeeds.intakeIn);
         }
 
     }
+
     public void intakeOut(){
-        intakeRoller.set(0);
+        intakeRoller.set(IntakeConstants.IntakeSpeeds.intakeOut);
 
     }
+
     public void rest(){
-        intakeRoller.set(0);
+        intakeRoller.set(IntakeConstants.IntakeSpeeds.rest);
 
     }
+
     public void hold(){
-        intakeRoller.set(0);
+        intakeRoller.set(IntakeConstants.IntakeSpeeds.hold);
     }
     
 }
