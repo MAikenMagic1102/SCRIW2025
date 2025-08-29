@@ -102,6 +102,11 @@ public class Elevator extends SubsystemBase{
         return setpoint - getElevatorHeight();
     };
 
+    public void rotationOnePercent() {
+        m_motorLeft.setControl(m_dutyLeft.withOutput(0.01));
+        m_motorRight.setControl(m_dutyRight.withOutput(0.01));
+    };
+
     @Override
     public void periodic(){
         SmartDashboard.setDefaultNumber("lefty", getRotLeft());
