@@ -4,19 +4,23 @@ import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.hardware.TalonFX;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Elevator extends SubsystemBase{
 
     // Define TalonFX motor objects
-    private TalonFX m_motorLeft;
-    private TalonFX m_motorRight;
+    private TalonFX m_motorLeft = ElevatorConstants.m_motorLeft;
+    private TalonFX m_motorRight = ElevatorConstants.m_motorRight;
 
     private double cmPerRot = ElevatorConstants.cmPerRot;
     private double cmElevatorZero = ElevatorConstants.cmElevatorZero;
 
     // Get motor rotations
-    private double motorLeftRot = m_motorLeft.getPosition().getValueAsDouble();
-    private double motorRightRot = m_motorRight.getPosition().getValueAsDouble();
+    private StatusSignal<Angle> motorLeftRotStatSig = m_motorLeft.getPosition();
+    private StatusSignal<Angle> motorRightRotStatSig = m_motorRight.getPosition();
+
+    private double motorLeftRot = motorLeftRotStatSig.getValueAsDouble();
+    private double motorRightRot = motorRightRotStatSig.getValueAsDouble();
 
     final DutyCycleOut m_dutyLeft = new DutyCycleOut(0.0);
     final DutyCycleOut m_dutyRight = new DutyCycleOut(0.0);
@@ -96,6 +100,16 @@ public class Elevator extends SubsystemBase{
     private double getError(double setpoint){
         // Return error between current height and desired position
         return setpoint - getElevatorHeight();
+    };
+
+    @Override
+    public void periodic(){
+        SmartDashboard.setDefaultNumber("lefty", getRotLeft());
+        SmartDashboard.setDefaultNumber("righty", getRotRight());
+
+        SmartDashboard.putNumber("Left Eeelvator rotations", getRotLeft()); 
+        SmartDashboard.putNumber("Right Eelevator rotations", getRotRight()); 
+        
     };
 
 }
