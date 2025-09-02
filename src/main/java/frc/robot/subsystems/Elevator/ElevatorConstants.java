@@ -1,37 +1,38 @@
 package frc.robot.subsystems.Elevator;
 
-import com.ctre.phoenix6.configs.CANcoderConfiguration;
-import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.hardware.CANcoder;
-import com.ctre.phoenix6.hardware.Pigeon2;
 import com.ctre.phoenix6.hardware.TalonFX;
-import com.ctre.phoenix6.sim.CANcoderSimState;
 import com.ctre.phoenix6.sim.TalonFXSimState;
-import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.DutyCycleOut;
-import com.ctre.phoenix6.hardware.TalonFX;
+
 
 public class ElevatorConstants {
 
-final TalonFX m_motorLeft = new TalonFX(0);
-final TalonFX m_motorRight = new TalonFX(1);
+public static final TalonFX m_motorLeft = new TalonFX(0);
+public static final TalonFX m_motorRight = new TalonFX(1);
 private final CANcoder leftSensor = new CANcoder(0);
 private final CANcoder rightSensor = new CANcoder(1);
 
-final DutyCycleOut m_motorleft = new DutyCycleOut(0.0);
-final DutyCycleOut m_motorright = new DutyCycleOut(0.0);
+final DutyCycleOut m_dutyMotorLeft = new DutyCycleOut(0.0);
+final DutyCycleOut m_dutyMotorRight = new DutyCycleOut(0.0);
 
 private final TalonFXSimState leftSim = m_motorLeft.getSimState();
 private final TalonFXSimState rightSim = m_motorRight.getSimState();
 
+public static final double cmPerRot = 0;
+public static final double cmElevatorZero = 0;
+
+public static final double errorRange = 0.05;
+
+
 public static final class ElevatorSetpoints {
-    public static final int barge = 0;
-    public static final int processor = 0;
-    public static final int elevatorGroundIntake  = 0;
-    public static final int elevatorLowerReef = 0;
-    public static final int elevatorUpperReef = 0;
-    public static final int elevatorHome = 0;
-    public static final int elevatorscore = 0;
+    public static final double barge = 0;
+    public static final double processor = 0;
+    public static final double elevatorGroundIntake  = 0;
+    public static final double elevatorLowerReef = 0;
+    public static final double elevatorUpperReef = 0;
+    public static final double elevatorHome = 0;
+    public static final double elevatorscore = 0;
 }
 
 public static final class SimulationRobotConstants {
