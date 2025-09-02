@@ -8,22 +8,22 @@ import edu.wpi.first.wpilibj.DutyCycle;
 import edu.wpi.first.wpilibj2.command.Command;
 
 public class Intake {
-    private TalonFX intakeRoller;
-    private DigitalInput intakeSensor;
-    
-
-    public Intake(){
-        intakeRoller = new TalonFX(IntakeConstants.m_intakeMotor);
-        intakeSensor = new  DigitalInput(IntakeConstants.intakeSensor);
-        TalonFXConfiguration intakeConfiguration = new TalonFXConfiguration();
+    private static TalonFX intakeRoller;
+    private static DigitalInput intakeSensor;
         
-    }
-
-    double motorPosRotations = intakeRoller.getPosition().getValueAsDouble();
-
-
-    public void intakeIn(){
-        if(!intakeSensor.get()){
+    
+        public Intake(){
+            intakeRoller = new TalonFX(IntakeConstants.m_intakeMotor);
+            intakeSensor = new  DigitalInput(IntakeConstants.intakeSensor);
+            TalonFXConfiguration intakeConfiguration = new TalonFXConfiguration();
+            
+        }
+    
+        double motorPosRotations = intakeRoller.getPosition().getValueAsDouble();
+    
+    
+        public static void intakeIn(){
+            if(!intakeSensor.get()){
             intakeRoller.set(IntakeConstants.IntakeSpeeds.intakeIn);
         }else{
             intakeRoller.set(IntakeConstants.IntakeSpeeds.intakeIn);
