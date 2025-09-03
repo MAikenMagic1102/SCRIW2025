@@ -92,14 +92,10 @@ public class RobotContainer {
       
       
               joystick.x().onTrue(new InstantCommand(()-> Intake.intakeIn()));
-    }
+            }
 
-        // joystick.y().onTrue(SuperStructure.setTarget4().andThen(new thingy) TODO thingy
-    }   
-      
+            public Command getAutonomousCommand() {
+                return Commands.print("No autonomous command configured");
+            }
+        }
 
-    public Command getAutonomousCommand() {
-        return Commands.print("No autonomous command configured");
-    }
-      
-}
