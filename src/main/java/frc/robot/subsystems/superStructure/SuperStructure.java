@@ -22,13 +22,23 @@ import java.util.function.Supplier;
 
 public class SuperStructure extends SubsystemBase{
 
-    // public SuperStructure( Elevator, ) {
-
-
+    public void reefHigh() {
         
-    // }
+    };
 
+    public void reefLow(){
 
+    };
+        
+    public void groundIntake() {
 
+    };
 
+    public void processorScore(){
+
+    };
+
+    public void bargeScore(){
+
+    };
 }

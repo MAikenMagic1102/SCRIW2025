@@ -28,7 +28,7 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 
 import frc.robot.generated.TunerConstants.TunerSwerveDrivetrain;
 
-public class pivot {
+public class Pivot {
 public double homeScoreAngle = 0;
 public double groundIntakeAngle = 0;
 public double reefIntakeAngle = 0;
@@ -58,4 +58,4 @@ public double currentAngle = rotorPosSignal.getValueAsDouble();
         }
     }
    
-}
+};
