@@ -71,7 +71,7 @@ public class Elevator extends SubsystemBase{
     };
 
     public void elevatorScoreBarge() {
-        sendElevatorToPoint(ElevatorConstants.ElevatorSetpoints.elevatorscore);
+        sendElevatorToPoint(ElevatorConstants.ElevatorSetpoints.barge);
     };
 
     public void elevatorTester() {
