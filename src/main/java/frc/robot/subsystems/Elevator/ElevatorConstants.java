@@ -32,7 +32,6 @@ public static final class ElevatorSetpoints {
     public static final double elevatorLowerReef = 0;
     public static final double elevatorUpperReef = 0;
     public static final double elevatorHome = 0;
-    public static final double elevatorscore = 0;
 }
 
 public static final class SimulationRobotConstants {
