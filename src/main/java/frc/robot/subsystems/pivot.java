@@ -40,19 +40,19 @@ Angle rotorPos = rotorPosSignal.getValue();
 
 public double currentAngle = rotorPosSignal.getValueAsDouble();
 
-    public Command groundIntake; {
+    public void groundIntake() {
         while (currentAngle >= 211 && currentAngle <= 209) {
             motorPivot.setControl(motorPivotRequest.withOutput(1));
         }
     }
     
-    public Command reefIntake; {
+    public void reefIntake() {
         while (currentAngle >= 121 && currentAngle <= 119) {
             motorPivot.setControl(motorPivotRequest.withOutput(1));
         }
     }
 
-    public Command homeScore; {
+    public void homeScore() {
         while (currentAngle >= 1 && currentAngle <= -1) {
             motorPivot.setControl(motorPivotRequest.withOutput(1));
         }
