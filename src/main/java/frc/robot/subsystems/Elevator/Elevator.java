@@ -78,6 +78,10 @@ public class Elevator extends SubsystemBase{
 
     };
 
+    public void elevatorProcessor() {
+        sendElevatorToPoint(ElevatorConstants.ElevatorSetpoints.processor);
+    };
+
     public double getRotLeft() {
         motorLeftRot = m_motorLeft.getPosition().getValueAsDouble();
         return motorLeftRot;
@@ -115,6 +119,5 @@ public class Elevator extends SubsystemBase{
         SmartDashboard.putNumber("Left Eeelvator rotations", getRotLeft()); 
         SmartDashboard.putNumber("Right Eelevator rotations", getRotRight()); 
         
-    };
-
+    }
 }

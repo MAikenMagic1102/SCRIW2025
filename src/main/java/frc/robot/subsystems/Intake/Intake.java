@@ -1,4 +1,4 @@
-package frc.robot.subsystems;
+package frc.robot.subsystems.Intake;
 
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.hardware.TalonFX;
@@ -6,6 +6,7 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DutyCycle;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.subsystems.Intake.IntakeConstants.IntakeSpeeds;
 
 public class Intake {
     private static TalonFX intakeRoller;
