@@ -1,45 +1,48 @@
 package frc.robot.subsystems.superStructure;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import static edu.wpi.first.units.Units.*;
-import static edu.wpi.first.wpilibj2.command.Commands.*;
-
-import com.ctre.phoenix6.Utils;
-import edu.wpi.first.wpilibj.Notifier;
-import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.Subsystem;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.RobotContainer;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.subsystems.Elevator.Elevator;
-
-import java.util.function.DoubleSupplier;
-import java.util.function.Supplier;
+import frc.robot.subsystems.Intake.Intake;
+import frc.robot.subsystems.Pivot;
 
 public class SuperStructure extends SubsystemBase{
-
+    
+    Elevator elevator;
+    Pivot pivot;
+    Intake intake;
+    private final int deafualtWait = 10;
 
     public void reefHigh() {
-        
+        elevator.elevatorUpperReef();
+        new WaitCommand(deafualtWait); // #TODO make da waity shorter wen slo
+        pivot.reefIntake();
+        intake.intakeIn();
     };
 
     public void reefLow(){
-
+        elevator.elevatorLowerReef();
+        new WaitCommand(deafualtWait);
+        pivot.reefIntake();
+        intake.intakeIn();
     };
         
     public void groundIntake() {
-
+        elevator.elevatorGroundIntake();
+        new WaitCommand(deafualtWait);
+        pivot.groundIntake();
+        intake.intakeIn();
     };
 
     public void processorScore(){
-
+        elevator.elevatorProcessor();
+        new WaitCommand(deafualtWait);
+        pivot.homeScore();
     };
 
     public void bargeScore(){
-
+        elevator.elevatorScoreBarge();
+        new WaitCommand(deafualtWait);
+        // pivot.bargeScore(); TODO: make dis worky
     };
 }
