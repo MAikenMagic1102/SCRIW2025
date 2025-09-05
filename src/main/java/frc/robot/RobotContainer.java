@@ -27,8 +27,6 @@ import frc.robot.subsystems.superStructure.SuperStructure;
 
 public class RobotContainer {
 
-    private final Elevator m_Elevator = new Elevator();
-
     private double MaxSpeed = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
     private double MaxAngularRate = RotationsPerSecond.of(0.75).in(RadiansPerSecond); // 3/4 of a rotation per second max angular velocity
 
@@ -61,9 +59,6 @@ public class RobotContainer {
                 drive.withVelocityX(-joystick.getLeftY() * MaxSpeed) // Drive forward with negative Y (forward)
                     .withVelocityY(-joystick.getLeftX() * MaxSpeed) // Drive left with negative X (left)
                     .withRotationalRate(-joystick.getRightX() * MaxAngularRate) // Drive counterclockwise with negative X (left)
-
-                
-
             )
         );
 
@@ -77,6 +72,13 @@ public class RobotContainer {
         joystick.b().whileTrue(drivetrain.applyRequest(() ->
             point.withModuleDirection(new Rotation2d(-joystick.getLeftY(), -joystick.getLeftX()))
         ));
+        
+        joystick.x().whileTrue(SuperStructure.groundIntakeCommand);
+        joystick.y().whileTrue(SuperStructure.reefHighCommand);
+        joystick.rightBumper().whileTrue(SuperStructure.reefLowCommand);
+        joystick.rightTrigger().whileTrue(SuperStructure.processorScoreCommand);
+        joystick.leftTrigger().whileTrue(SuperStructure.bargeScoreCommand);
+        // TODO: fix ur friggin keybinds to make dem les scuffed and les conflicty
 
         // Run SysId routines when holding back/start and X/Y.
         // Note that each routine should be run exactly once in a single log.

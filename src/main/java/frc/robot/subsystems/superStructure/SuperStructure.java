@@ -1,5 +1,6 @@
 package frc.robot.subsystems.superStructure;
 
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.subsystems.Elevator.Elevator;
@@ -13,34 +14,34 @@ public class SuperStructure extends SubsystemBase{
     Intake intake;
     private final int deafualtWait = 10;
 
-    public void reefHigh() {
+    public static Command reefHighCommand; {
         elevator.elevatorUpperReef();
         new WaitCommand(deafualtWait); // #TODO make da waity shorter wen slo
         pivot.reefIntake();
         intake.intakeIn();
     };
 
-    public void reefLow(){
+    public static Command reefLowCommand; {
         elevator.elevatorLowerReef();
         new WaitCommand(deafualtWait);
         pivot.reefIntake();
         intake.intakeIn();
     };
         
-    public void groundIntake() {
+    public static Command groundIntakeCommand; {
         elevator.elevatorGroundIntake();
         new WaitCommand(deafualtWait);
         pivot.groundIntake();
         intake.intakeIn();
     };
 
-    public void processorScore(){
+    public static Command processorScoreCommand; {
         elevator.elevatorProcessor();
         new WaitCommand(deafualtWait);
         pivot.homeScore();
     };
 
-    public void bargeScore(){
+    public static Command bargeScoreCommand; {
         elevator.elevatorScoreBarge();
         new WaitCommand(deafualtWait);
         // pivot.bargeScore(); TODO: make dis worky
