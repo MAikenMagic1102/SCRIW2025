@@ -7,41 +7,41 @@ import frc.robot.subsystems.Elevator.Elevator;
 import frc.robot.subsystems.Intake.Intake;
 import frc.robot.subsystems.Pivot;
 
-public class SuperStructure extends SubsystemBase{
+public class SuperStructure extends Command{
     
-    Elevator elevator;
+    Elevator elevator = new Elevator();
     Pivot pivot;
     Intake intake;
     private final int deafualtWait = 10;
 
-    public static Command reefHighCommand; {
+    public Command reefHighCommand; {
         elevator.elevatorUpperReef();
         new WaitCommand(deafualtWait); // #TODO make da waity shorter wen slo
         pivot.reefIntake();
         intake.intakeIn();
     };
 
-    public static Command reefLowCommand; {
+    public Command reefLowCommand; {
         elevator.elevatorLowerReef();
         new WaitCommand(deafualtWait);
         pivot.reefIntake();
         intake.intakeIn();
     };
         
-    public static Command groundIntakeCommand; {
+    public Command groundIntakeCommand; {
         elevator.elevatorGroundIntake();
         new WaitCommand(deafualtWait);
         pivot.groundIntake();
         intake.intakeIn();
     };
 
-    public static Command processorScoreCommand; {
+    public Command processorScoreCommand; {
         elevator.elevatorProcessor();
         new WaitCommand(deafualtWait);
         pivot.homeScore();
     };
 
-    public static Command bargeScoreCommand; {
+    public Command bargeScoreCommand; {
         elevator.elevatorScoreBarge();
         new WaitCommand(deafualtWait);
         // pivot.bargeScore(); TODO: make dis worky

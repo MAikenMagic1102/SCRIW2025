@@ -43,6 +43,8 @@ public class RobotContainer {
 
     public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
 
+    public final SuperStructure superStructure = new SuperStructure();
+
     public RobotContainer() {
         configureBindings();
     }
@@ -73,11 +75,11 @@ public class RobotContainer {
             point.withModuleDirection(new Rotation2d(-joystick.getLeftY(), -joystick.getLeftX()))
         ));
         
-        joystick.x().whileTrue(SuperStructure.groundIntakeCommand);
-        joystick.y().whileTrue(SuperStructure.reefHighCommand);
-        joystick.rightBumper().whileTrue(SuperStructure.reefLowCommand);
-        joystick.rightTrigger().whileTrue(SuperStructure.processorScoreCommand);
-        joystick.leftTrigger().whileTrue(SuperStructure.bargeScoreCommand);
+        joystick.x().onTrue(superStructure.groundIntakeCommand);
+        joystick.y().whileTrue(superStructure.reefHighCommand);
+        joystick.rightBumper().whileTrue(superStructure.reefLowCommand);
+        joystick.rightTrigger().whileTrue(superStructure.processorScoreCommand);
+        joystick.leftTrigger().whileTrue(superStructure.bargeScoreCommand);
         // TODO: fix ur friggin keybinds to make dem les scuffed and les conflicty
 
         // Run SysId routines when holding back/start and X/Y.
