@@ -27,8 +27,6 @@ import frc.robot.subsystems.superStructure.SuperStructure;
 
 public class RobotContainer {
 
-    private final Elevator m_Elevator = new Elevator();
-
     private double MaxSpeed = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
     private double MaxAngularRate = RotationsPerSecond.of(0.75).in(RadiansPerSecond); // 3/4 of a rotation per second max angular velocity
 
@@ -44,6 +42,8 @@ public class RobotContainer {
     private final CommandXboxController joystick = new CommandXboxController(0);
 
     public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
+
+    public final SuperStructure superStructure = new SuperStructure();
 
     public RobotContainer() {
         configureBindings();
@@ -61,9 +61,6 @@ public class RobotContainer {
                 drive.withVelocityX(-joystick.getLeftY() * MaxSpeed) // Drive forward with negative Y (forward)
                     .withVelocityY(-joystick.getLeftX() * MaxSpeed) // Drive left with negative X (left)
                     .withRotationalRate(-joystick.getRightX() * MaxAngularRate) // Drive counterclockwise with negative X (left)
-
-                
-
             )
         );
 
@@ -77,6 +74,13 @@ public class RobotContainer {
         joystick.b().whileTrue(drivetrain.applyRequest(() ->
             point.withModuleDirection(new Rotation2d(-joystick.getLeftY(), -joystick.getLeftX()))
         ));
+        
+        joystick.x().onTrue(superStructure.groundIntakeCommand);
+        joystick.y().whileTrue(superStructure.reefHighCommand);
+        joystick.rightBumper().whileTrue(superStructure.reefLowCommand);
+        joystick.rightTrigger().whileTrue(superStructure.processorScoreCommand);
+        joystick.leftTrigger().whileTrue(superStructure.bargeScoreCommand);
+        // TODO: fix ur friggin keybinds to make dem les scuffed and les conflicty
 
         // Run SysId routines when holding back/start and X/Y.
         // Note that each routine should be run exactly once in a single log.
@@ -91,7 +95,7 @@ public class RobotContainer {
         drivetrain.registerTelemetry(logger::telemeterize);
       
       
-              //joystick.x().onTrue(new InstantCommand(()-> Intake.intakeIn()));
+              joystick.x().onTrue(new InstantCommand(()-> Intake.intakeIn()));
             }
 
             public Command getAutonomousCommand() {
