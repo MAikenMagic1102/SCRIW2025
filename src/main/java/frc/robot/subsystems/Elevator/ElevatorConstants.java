@@ -8,10 +8,10 @@ import com.ctre.phoenix6.controls.DutyCycleOut;
 
 public class ElevatorConstants {
 
-public static final TalonFX m_motorLeft = new TalonFX(0);
-public static final TalonFX m_motorRight = new TalonFX(1);
-private final CANcoder leftSensor = new CANcoder(0);
-private final CANcoder rightSensor = new CANcoder(1);
+public static final TalonFX m_motorLeft = new TalonFX(20);
+public static final TalonFX m_motorRight = new TalonFX(21);
+private final CANcoder leftSensor = new CANcoder(22);
+private final CANcoder rightSensor = new CANcoder(23);
 
 final DutyCycleOut m_dutyMotorLeft = new DutyCycleOut(0.0);
 final DutyCycleOut m_dutyMotorRight = new DutyCycleOut(0.0);
