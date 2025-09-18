@@ -119,5 +119,5 @@ public class Elevator extends SubsystemBase{
         SmartDashboard.putNumber("Left Eeelvator rotations", getRotLeft()); 
         SmartDashboard.putNumber("Right Eelevator rotations", getRotRight()); 
         
-    }
+    };
 }
