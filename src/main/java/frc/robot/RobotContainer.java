@@ -95,7 +95,7 @@ public class RobotContainer {
         drivetrain.registerTelemetry(logger::telemeterize);
       
       
-              joystick.x().onTrue(new InstantCommand(()-> Intake.intakeIn()));
+              //joystick.x().onTrue(new InstantCommand(()-> Intake.intakeIn()));
             }
 
             public Command getAutonomousCommand() {

@@ -17,28 +17,28 @@ public class SuperStructure extends Command{
     public Command reefHighCommand; {
         elevator.elevatorUpperReef();
         new WaitCommand(deafualtWait); // #TODO make da waity shorter wen slo
-        pivot.reefIntake();
+        //pivot.reefIntake();
         intake.intakeIn();
     };
 
     public Command reefLowCommand; {
         elevator.elevatorLowerReef();
         new WaitCommand(deafualtWait);
-        pivot.reefIntake();
+        //pivot.reefIntake();
         intake.intakeIn();
     };
         
     public Command groundIntakeCommand; {
         elevator.elevatorGroundIntake();
         new WaitCommand(deafualtWait);
-        pivot.groundIntake();
+        //pivot.groundIntake();
         intake.intakeIn();
     };
 
     public Command processorScoreCommand; {
         elevator.elevatorProcessor();
         new WaitCommand(deafualtWait);
-        pivot.homeScore();
+        //pivot.homeScore();
     };
 
     public Command bargeScoreCommand; {
