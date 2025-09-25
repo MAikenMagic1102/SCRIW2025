@@ -16,28 +16,28 @@ public class SuperStructure extends SubsystemBase{
     public void reefHigh() {
         elevator.elevatorUpperReef();
         new WaitCommand(deafualtWait); // #TODO make da waity shorter wen slo
-        pivot.reefIntake();
+       // pivot.reefIntake();
         intake.intakeIn();
     };
 
     public void reefLow(){
         elevator.elevatorLowerReef();
         new WaitCommand(deafualtWait);
-        pivot.reefIntake();
+        //pivot.reefIntake();
         intake.intakeIn();
     };
         
     public void groundIntake() {
         elevator.elevatorGroundIntake();
         new WaitCommand(deafualtWait);
-        pivot.groundIntake();
+        //pivot.groundIntake();
         intake.intakeIn();
     };
 
     public void processorScore(){
         elevator.elevatorProcessor();
         new WaitCommand(deafualtWait);
-        pivot.homeScore();
+        //pivot.homeScore();
     };
 
     public void bargeScore(){
