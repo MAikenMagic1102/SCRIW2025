@@ -77,8 +77,9 @@ public class RobotContainer {
         
         joystick.x().onTrue(superStructure.groundIntakeCommand);
         joystick.y().whileTrue(superStructure.reefHighCommand);
-        joystick.rightBumper().whileTrue(superStructure.reefLowCommand);
+        joystick.rightBumper().onTrue(superStructure.reefLowCommand);
         joystick.rightTrigger().whileTrue(superStructure.processorScoreCommand);
+
         joystick.leftTrigger().whileTrue(superStructure.bargeScoreCommand);
         // TODO: fix ur friggin keybinds to make dem les scuffed and les conflicty
 
@@ -95,11 +96,11 @@ public class RobotContainer {
         drivetrain.registerTelemetry(logger::telemeterize);
       
       
-              joystick.x().onTrue(new InstantCommand(()-> Intake.intakeIn()));
-            }
+            //   joystick.x().onTrue(new InstantCommand(()-> Intake.intakeIn()));
+            // }
+    }
 
-            public Command getAutonomousCommand() {
-                return Commands.print("No autonomous command configured");
-            }
-        }
-
+    public Command getAutonomousCommand() {
+        return Commands.print("No autonomous command configured");
+    }
+}

@@ -1,11 +1,14 @@
 package frc.robot.subsystems.superStructure;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
+import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.subsystems.Elevator.Elevator;
 import frc.robot.subsystems.Intake.Intake;
-import frc.robot.subsystems.Pivot;
+import frc.robot.subsystems.Pivot.Pivot;
 
 public class SuperStructure extends Command{
     
@@ -15,10 +18,12 @@ public class SuperStructure extends Command{
     private final int deafualtWait = 10;
 
     public Command reefHighCommand; {
-        elevator.elevatorUpperReef();
-        new WaitCommand(deafualtWait); // #TODO make da waity shorter wen slo
-        pivot.reefIntake();
-        intake.intakeIn();
+        return Commands.sequence(        
+            elevator.elevatorUpperReef(),
+            new WaitCommand(deafualtWait), // #TODO make da waity shorter wen slo
+            pivot.reefIntake(),
+            intake.intakeIn_CMD()
+        );
     };
 
     public Command reefLowCommand; {

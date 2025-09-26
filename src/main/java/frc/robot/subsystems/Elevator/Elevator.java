@@ -1,33 +1,55 @@
 package frc.robot.subsystems.Elevator;
 import com.ctre.phoenix6.StatusSignal;
+import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.DutyCycleOut;
+import com.ctre.phoenix6.controls.Follower;
+import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 import edu.wpi.first.units.measure.Angle;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Elevator extends SubsystemBase{
 
     // Define TalonFX motor objects
-    private TalonFX m_motorLeft = ElevatorConstants.m_motorLeft;
-    private TalonFX m_motorRight = ElevatorConstants.m_motorRight;
+    private TalonFX m_motorLeft;
+    private TalonFX m_motorRight;
 
     private double cmPerRot = ElevatorConstants.cmPerRot;
     private double cmElevatorZero = ElevatorConstants.cmElevatorZero;
 
     // Get motor rotations
-    private StatusSignal<Angle> motorLeftRotStatSig = m_motorLeft.getPosition();
-    private StatusSignal<Angle> motorRightRotStatSig = m_motorRight.getPosition();
+    private StatusSignal<Angle> motorLeftRotStatSig;
+    private StatusSignal<Angle> motorRightRotStatSig;
 
-    private double motorLeftRot = motorLeftRotStatSig.getValueAsDouble();
-    private double motorRightRot = motorRightRotStatSig.getValueAsDouble();
+    private double motorLeftRot;
+    private double motorRightRot;
 
+    //Control Requests
     final DutyCycleOut m_dutyLeft = new DutyCycleOut(0.0);
     final DutyCycleOut m_dutyRight = new DutyCycleOut(0.0);
 
-    
+    final PositionVoltage positionVoltage = new PositionVoltage(0);
+
     private double positionError;
     private double acceptableError = ElevatorConstants.errorRange;
+
+    public Elevator(){
+        m_motorLeft = new TalonFX(ElevatorConstants.motorLeft_ID);
+        m_motorRight = new TalonFX(ElevatorConstants.motorRight_ID);
+
+        TalonFXConfiguration motorLeft_Config = new TalonFXConfiguration();
+
+        motorLeft_Config.Slot0.kP = 0.1;
+        motorLeft_Config.Slot0.kI = 0.0;
+        motorLeft_Config.Slot0.kD = 0.0;
+
+        m_motorLeft.getConfigurator().apply(motorLeft_Config);
+
+        m_motorRight.setControl(new Follower(ElevatorConstants.motorLeft_ID, false));
+    }
     
 
     private void sendElevatorToPoint(double point){
@@ -52,27 +74,31 @@ public class Elevator extends SubsystemBase{
             positionError = getError(point);
             withinError = acceptableErrorLower < positionError && positionError < acceptableErrorUpper;
         };
-    };
+    }
+
+    public void setPosition(double position){
+        m_motorLeft.setControl(positionVoltage.withPosition(position));
+    }
 
     public void elevatorGroundIntake(){
        sendElevatorToPoint(ElevatorConstants.ElevatorSetpoints.elevatorGroundIntake);
-    };
+    }
 
     public void elevatorLowerReef() {
         sendElevatorToPoint(ElevatorConstants.ElevatorSetpoints.elevatorLowerReef);
-    };
+    }
 
-    public void elevatorUpperReef() {
-        sendElevatorToPoint(ElevatorConstants.ElevatorSetpoints.elevatorLowerReef);
-    };
+    public Command elevatorUpperReef() {
+        return Commands.runOnce(() -> sendElevatorToPoint(ElevatorConstants.ElevatorSetpoints.elevatorLowerReef));
+    }
 
     public void elevatorHome() {
         sendElevatorToPoint(ElevatorConstants.ElevatorSetpoints.elevatorHome);
-    };
+    }
 
     public void elevatorScoreBarge() {
         sendElevatorToPoint(ElevatorConstants.ElevatorSetpoints.barge);
-    };
+    }
 
     public void elevatorTester() {
 
@@ -113,6 +139,12 @@ public class Elevator extends SubsystemBase{
 
     @Override
     public void periodic(){
+        motorLeftRotStatSig = m_motorLeft.getPosition();
+        motorRightRotStatSig = m_motorRight.getPosition();
+
+        motorLeftRot = motorLeftRotStatSig.getValueAsDouble();
+        motorRightRot = motorRightRotStatSig.getValueAsDouble();
+
         SmartDashboard.setDefaultNumber("lefty", getRotLeft());
         SmartDashboard.setDefaultNumber("righty", getRotRight());
 
