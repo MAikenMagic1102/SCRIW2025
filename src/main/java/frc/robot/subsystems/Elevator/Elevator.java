@@ -1,6 +1,9 @@
 package frc.robot.subsystems.Elevator;
 import com.ctre.phoenix6.StatusSignal;
+import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.DutyCycleOut;
+import com.ctre.phoenix6.controls.Follower;
+import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -9,8 +12,9 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class Elevator extends SubsystemBase{
 
     // Define TalonFX motor objects
-    private TalonFX m_motorLeft = ElevatorConstants.m_motorLeft;
-    private TalonFX m_motorRight = ElevatorConstants.m_motorRight;
+
+    public TalonFX m_motorLeft;
+    public TalonFX m_motorRight;
 
     private double cmPerRot = ElevatorConstants.cmPerRot;
     private double cmElevatorZero = ElevatorConstants.cmElevatorZero;
@@ -25,10 +29,25 @@ public class Elevator extends SubsystemBase{
     final DutyCycleOut m_dutyLeft = new DutyCycleOut(0.0);
     final DutyCycleOut m_dutyRight = new DutyCycleOut(0.0);
 
+    final PositionVoltage positionVoltage = new PositionVoltage(0);
     
     private double positionError;
     private double acceptableError = ElevatorConstants.errorRange;
     
+    public Elevator(){
+        m_motorLeft = new TalonFX(ElevatorConstants.m_motorLeft_ID);
+        m_motorRight = new TalonFX(ElevatorConstants.m_motorRight_ID);
+
+        TalonFXConfiguration motorLeft_Configuration = new TalonFXConfiguration();
+
+        //TODO: all var & definitions
+
+        motorLeft_Configuration.Slot0.kP = 0;
+
+        m_motorLeft.getConfigurator().apply(motorLeft_Configuration);
+        m_motorRight.setControl(new Follower(ElevatorConstants.m_motorLeft_ID, false));
+    }
+
 
     private void sendElevatorToPoint(double point){
         positionError = getError(point);
@@ -53,6 +72,12 @@ public class Elevator extends SubsystemBase{
             withinError = acceptableErrorLower < positionError && positionError < acceptableErrorUpper;
         };
     };
+
+public void setPosition(double position){
+
+m_motorLeft.setControl(positionVoltage.withPosition(position));
+    
+}
 
     public void elevatorGroundIntake(){
        sendElevatorToPoint(ElevatorConstants.ElevatorSetpoints.elevatorGroundIntake);
