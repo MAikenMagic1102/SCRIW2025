@@ -6,6 +6,7 @@ import com.ctre.phoenix6.SignalLogger;
 import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.Utils;
 import com.ctre.phoenix6.controls.DutyCycleOut;
+import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.swerve.SwerveDrivetrainConstants;
 import com.ctre.phoenix6.swerve.SwerveModuleConstants;
@@ -26,20 +27,23 @@ import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 
 import frc.robot.generated.TunerConstants.TunerSwerveDrivetrain;
+import frc.robot.subsystems.Elevator.ElevatorConstants;
 
 
 public class Climber {
     //TODO: Write climber logic. I could use some help, since I have no Idea what I'm doing. Thanks, Codecademy
     //Maybe I can look through the other code as reference...
 final TalonFX motorClimber = new TalonFX(0, "rio");
-final DutyCycleOut motorPivotRequest = new DutyCycleOut(0.0);
+final DutyCycleOut motorClimberRequest = new DutyCycleOut(0.0);
 StatusSignal<Angle> rotorPosSignal = motorClimber.getRotorPosition();
 Angle rotorPos = rotorPosSignal.getValue();
 public double currentAngle = rotorPosSignal.getValueAsDouble();
 //I don't know what I'm doing but I'm doing something :3
 public void neutralPos() {
     while (currentAngle >= 211 && currentAngle <= 209) {
-        motorClimber.setControl(motorPivotRequest.withOutput(1));
+        motorClimber.setControl(new Follower(0, true));
+
+        motorClimber.setControl(motorClimberRequest.withOutput(1));
     }
 
 }
