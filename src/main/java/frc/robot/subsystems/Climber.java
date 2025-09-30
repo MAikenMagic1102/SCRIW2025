@@ -48,6 +48,9 @@ public void neutralPos() {
 
 }
 public void extendedPos() {
+    motorClimber.setControl(new Follower(0, true));
+
+    motorClimber.setControl(motorClimberRequest.withOutput(1));
 
 }
 }
