@@ -38,9 +38,12 @@ Angle rotorPos = rotorPosSignal.getValue();
 public double currentAngle = rotorPosSignal.getValueAsDouble();
 //I don't know what I'm doing but I'm doing something :3
 public void neutralPos() {
+    while (currentAngle >= 211 && currentAngle <= 209) {
+        motorClimber.setControl(motorPivotRequest.withOutput(1));
+    }
 
 }
 public void extendedPos() {
-    
+
 }
 }
