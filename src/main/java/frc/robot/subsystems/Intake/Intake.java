@@ -9,8 +9,8 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Intake.IntakeConstants.IntakeSpeeds;
 
 public class Intake {
-    private static TalonFX intakeRoller;
-    private static DigitalInput intakeSensor;
+    private TalonFX intakeRoller;
+    private DigitalInput intakeSensor;
         
     
         public Intake(){
@@ -20,10 +20,11 @@ public class Intake {
             
         }
     
-        double motorPosRotations = intakeRoller.getPosition().getValueAsDouble();
+        public double getRollerPOS(){
+            return intakeRoller.getPosition().getValueAsDouble();
+        }
     
-    
-        public static void intakeIn(){
+        public void intakeIn(){
             if(!intakeSensor.get()){
             intakeRoller.set(IntakeConstants.IntakeSpeeds.intakeIn);
         }else{
