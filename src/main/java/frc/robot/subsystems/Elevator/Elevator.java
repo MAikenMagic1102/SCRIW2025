@@ -6,6 +6,8 @@ import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 import edu.wpi.first.units.measure.Angle;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -20,11 +22,11 @@ public class Elevator extends SubsystemBase{
     private double cmElevatorZero = ElevatorConstants.cmElevatorZero;
 
     // Get motor rotations
-    private StatusSignal<Angle> motorLeftRotStatSig = m_motorLeft.getPosition();
-    private StatusSignal<Angle> motorRightRotStatSig = m_motorRight.getPosition();
+    private StatusSignal<Angle> motorLeftRotStatSig;
+    private StatusSignal<Angle> motorRightRotStatSig;
 
-    private double motorLeftRot = motorLeftRotStatSig.getValueAsDouble();
-    private double motorRightRot = motorRightRotStatSig.getValueAsDouble();
+    private double motorLeftRot;
+    private double motorRightRot;
 
     final DutyCycleOut m_dutyLeft = new DutyCycleOut(0.0);
     final DutyCycleOut m_dutyRight = new DutyCycleOut(0.0);
@@ -87,12 +89,16 @@ m_motorLeft.setControl(positionVoltage.withPosition(position));
         sendElevatorToPoint(ElevatorConstants.ElevatorSetpoints.elevatorLowerReef);
     };
 
-    public void elevatorUpperReef() {
-        sendElevatorToPoint(ElevatorConstants.ElevatorSetpoints.elevatorLowerReef);
+    public Command elevatorUpperReef() {
+        return Commands.runOnce(()-> sendElevatorToPoint(ElevatorConstants.ElevatorSetpoints.elevatorUpperReef));
+
+        // sendElevatorToPoint(ElevatorConstants.ElevatorSetpoints.elevatorLowerReef);
     };
 
-    public void elevatorHome() {
-        sendElevatorToPoint(ElevatorConstants.ElevatorSetpoints.elevatorHome);
+    public Command elevatorHome() {
+        return Commands.runOnce(()-> sendElevatorToPoint(ElevatorConstants.ElevatorSetpoints.elevatorHome));
+
+        // sendElevatorToPoint(ElevatorConstants.ElevatorSetpoints.elevatorHome);
     };
 
     public void elevatorScoreBarge() {
@@ -138,6 +144,13 @@ m_motorLeft.setControl(positionVoltage.withPosition(position));
 
     @Override
     public void periodic(){
+
+        motorLeftRotStatSig = m_motorLeft.getPosition();
+        motorRightRotStatSig = m_motorRight.getPosition();
+
+        motorLeftRot = motorLeftRotStatSig.getValueAsDouble();
+     motorRightRot = motorRightRotStatSig.getValueAsDouble();
+
         SmartDashboard.setDefaultNumber("lefty", getRotLeft());
         SmartDashboard.setDefaultNumber("righty", getRotRight());
 
