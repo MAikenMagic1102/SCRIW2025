@@ -13,28 +13,79 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
-// import frc.robot.commands.AutoRunToCoral;
-// import frc.robot.commands.DriveToPoseCommand;
-// import frc.robot.commands.IntakeDeploy;
-// import frc.robot.commands.IntakeRetract;
-// import frc.robot.commands.IntakeRollersOn;
-// import frc.robot.commands.PrepScore;
-// import frc.robot.commands.ReturnToHome;
-// import frc.robot.commands.ScoreCoral;
-// import frc.robot.field.FieldUtils;
-// import frc.robot.field.ReefPole;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
-// import frc.robot.subsystems.Superstructure;
-// import frc.robot.subsystems.CoralGripper.CoralGripper;
-// import frc.robot.subsystems.Intake.CoralIntake;
-// import frc.robot.util.PoseUtils;
+
 
 
 public class AutoRoutines {
 
     private final AutoFactory m_factory;
     private final CommandSwerveDrivetrain drive;
+
+    public AutoRoutines(CommandSwerveDrivetrain drive) {
+
+        this.drive = drive;
+        m_factory = drive.createAutoFactory();
+    }
+public AutoRoutine Red_Mid_Frwd(){
+    AutoRoutine routine = m_factory.newRoutine("Red_Mid_Frwd");
+    final AutoTrajectory redMiddleForeward = routine.trajectory("RedMiddleForeward");
+
+    routine.active().onTrue(
+    redMiddleForeward.resetOdometry().andThen(redMiddleForeward.cmd()));
+    return routine;
+}
+
+public AutoRoutine Red_Lft_Frwd(){
+    AutoRoutine routine = m_factory.newRoutine("Red_Lft_Frwd");
+    final AutoTrajectory redLeftForeward = routine.trajectory("RedLeftForeward");
+
+    routine.active().onTrue(
+    redLeftForeward.resetOdometry().andThen(redLeftForeward.cmd()));
+    return routine;
+}
+
+public AutoRoutine Red_Rgt_Frwd(){
+    AutoRoutine routine = m_factory.newRoutine("Red_Rgt_Frwd");
+    final AutoTrajectory redRightForeward = routine.trajectory("RedRightForeward");
+
+    routine.active().onTrue(
+    redRightForeward.resetOdometry().andThen(redRightForeward.cmd()));
+    return routine;
+}
+
+public AutoRoutine Blue_Mid_Frwd(){
+    AutoRoutine routine = m_factory.newRoutine("Blue_Mid_Frwd");
+    final AutoTrajectory blueMiddleForeward = routine.trajectory("BlueMiddleForeward");
+
+    routine.active().onTrue(
+    blueMiddleForeward.resetOdometry().andThen(blueMiddleForeward.cmd()));
+    return routine;
+}
+
+
+public AutoRoutine Blue_Lft_Frwd(){
+    AutoRoutine routine = m_factory.newRoutine("Blue_Lft_Frwd");
+    final AutoTrajectory blueLeftForeward = routine.trajectory("BlueLeftForeward");
+
+    routine.active().onTrue(
+    blueLeftForeward.resetOdometry().andThen(blueLeftForeward.cmd()));
+    return routine;
+}
+
+public AutoRoutine Blue_Rgt_Frwd(){
+    AutoRoutine routine = m_factory.newRoutine("Blue_Rgt_Frwd");
+    final AutoTrajectory blueRightForeward = routine.trajectory("BlueRightForeward");
+
+    routine.active().onTrue(
+    blueRightForeward.resetOdometry().andThen(blueRightForeward.cmd()));
+    return routine;
+}
+ 
+
+
     // public AutoRoutine Red_Mid_Frwd(){
+    //     final AutoRoutine = m_factory.newRoutine("RedMiddleForeward");
 
     // }    
     

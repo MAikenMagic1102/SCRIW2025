@@ -9,9 +9,11 @@ import static edu.wpi.first.units.Units.*;
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 
+
 import choreo.auto.AutoChooser;
 import choreo.auto.AutoFactory;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -38,8 +40,23 @@ public class RobotContainer {
 
     public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
 
+        private final AutoRoutines autoRoutines;
+
+    private final AutoChooser autoChooser = new AutoChooser();
+
     public RobotContainer() {
         configureBindings();
+        autoRoutines = new AutoRoutines(drivetrain);
+
+        autoChooser.addRoutine("RedMiddleForeward", autoRoutines::Red_Mid_Frwd);
+        autoChooser.addRoutine("RedLeftForeward", autoRoutines::Red_Lft_Frwd);
+        autoChooser.addRoutine("RedRightForeward", autoRoutines::Red_Rgt_Frwd);
+
+        autoChooser.addRoutine("BlueMiddleForeward", autoRoutines::Blue_Mid_Frwd);
+        autoChooser.addRoutine("BlueLeftForeward", autoRoutines::Blue_Lft_Frwd);
+        autoChooser.addRoutine("BlueRightForeward", autoRoutines::Blue_Rgt_Frwd);
+
+        SmartDashboard.putData("Auto Chooser", autoChooser);
     }
 
     private void configureBindings() {
@@ -80,6 +97,7 @@ public class RobotContainer {
     }
 
     public Command getAutonomousCommand() {
-        return Commands.print("No autonomous command configured");
+        /* Run the routine selected from the auto chooser */
+        return autoChooser.selectedCommand();
     }
 }
