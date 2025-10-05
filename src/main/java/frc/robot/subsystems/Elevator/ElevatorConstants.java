@@ -11,31 +11,25 @@ public class ElevatorConstants {
     public static final int m_motorLeft_ID = 20;
     public static final int m_motorRight_ID = 21;
 
-//A
+    public static final double cmPerRot = 0;
+    public static final double cmElevatorZero = 0;
 
-public static final double cmPerRot = 0;
-public static final double cmElevatorZero = 0;
+    public static final double errorRange = 0.05;
 
-public static final double errorRange = 0.05;
+    public static final class ElevatorSetpoints {
+        public static final double barge = 0;
+        public static final double processor = 0;
+        public static final double elevatorGroundIntake  = 0;
+        public static final double elevatorLowerReef = 0;
+        public static final double elevatorUpperReef = 0;
+        public static final double elevatorHome = 0;
+    }
 
+    public static final class SimulationRobotConstants {
 
-public static final class ElevatorSetpoints {
-    public static final double barge = 0;
-    public static final double processor = 0;
-    public static final double elevatorGroundIntake  = 0;
-    public static final double elevatorLowerReef = 0;
-    public static final double elevatorUpperReef = 0;
-    public static final double elevatorHome = 0;
-}
-
-public static final class SimulationRobotConstants {
-
-    public static final double MinElevatorHeightMeters = 0; // m
-    public static final double MaxElevatorHeightMeters = 0; // m
-
-
-}
-
+        public static final double MinElevatorHeightMeters = 0; // m
+        public static final double MaxElevatorHeightMeters = 0; // m
+    }
 }
 
 
