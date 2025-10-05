@@ -52,28 +52,28 @@ public class Elevator extends SubsystemBase{
 
 
     private void sendElevatorToPoint(double point){
-        positionError = getError(point);
-        double acceptableErrorLower = (1 - acceptableError) * point;
-        double acceptableErrorUpper = (1 + acceptableError) * point;
-        boolean withinError = acceptableErrorLower < positionError && positionError < acceptableErrorUpper;
-        double motorPercent = 0.1;
+        // positionError = getError(point);
+        // double acceptableErrorLower = (1 - acceptableError) * point;
+        // double acceptableErrorUpper = (1 + acceptableError) * point;
+        // boolean withinError = acceptableErrorLower < positionError && positionError < acceptableErrorUpper;
+        // double motorPercent = 0.1;
 
-        // Negative error means that our elevator is higher than the desired position
-        if(positionError < 0){
-            // Negative percent moves elevator down
-            motorPercent *= -1;
-        }
+        // //Negative error means that our elevator is higher than the desired position
+        //  if(positionError < 0){
+        //      // Negative percent moves elevator down
+        //      motorPercent *= -1;
+        //  }
 
         // Keep applying power until elevator is within 5% of the desired location
         // TODO: WARNING: UNTESTED CODE! NOT FOR USE ON ROBOT! FIGURE OUT SIM FIRST! FIGURE OUT WHICH WAY THE MOTORS ROTATE
-        while(!withinError){
-            m_motorLeft.setControl(m_dutyLeft.withOutput(motorPercent));
-            m_motorRight.setControl(m_dutyRight.withOutput(motorPercent));
+        // while(!withinError){
+        //     m_motorLeft.setControl(m_dutyLeft.withOutput(motorPercent));
+        //     m_motorRight.setControl(m_dutyRight.withOutput(motorPercent));
             
-            positionError = getError(point);
-            withinError = acceptableErrorLower < positionError && positionError < acceptableErrorUpper;
-        };
-    };
+        //     positionError = getError(point);
+        //     withinError = acceptableErrorLower < positionError && positionError < acceptableErrorUpper;
+        // }
+    }
 
 public void setPosition(double position){
 
@@ -92,7 +92,7 @@ m_motorLeft.setControl(positionVoltage.withPosition(position));
 
     public Command elevatorUpperReef() {
         return Commands.runOnce(()-> sendElevatorToPoint(ElevatorConstants.ElevatorSetpoints.elevatorUpperReef));
-
+        
         // sendElevatorToPoint(ElevatorConstants.ElevatorSetpoints.elevatorLowerReef);
     };
 
