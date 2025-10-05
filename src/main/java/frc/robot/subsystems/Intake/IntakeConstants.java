@@ -1,5 +1,8 @@
 package frc.robot.subsystems.Intake;
 
+import com.ctre.phoenix6.configs.Slot0Configs;
+import com.ctre.phoenix6.hardware.CANcoder;
+import com.ctre.phoenix6.hardware.TalonFX;
 
 public class IntakeConstants {
     public final int intakeMoter = 0;
