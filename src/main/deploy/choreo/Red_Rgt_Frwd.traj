@@ -1,0 +1,48 @@
+{
+ "name":"Red_Rgt_Frwd",
+ "version":1,
+ "snapshot":{
+  "waypoints":[
+    {"x":10.0, "y":6.2, "heading":0.0, "intervals":13, "split":false, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
+    {"x":11.6, "y":6.2, "heading":0.0, "intervals":40, "split":false, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false}],
+  "constraints":[
+    {"from":"first", "to":null, "data":{"type":"StopPoint", "props":{}}, "enabled":true},
+    {"from":"last", "to":null, "data":{"type":"StopPoint", "props":{}}, "enabled":true},
+    {"from":"first", "to":"last", "data":{"type":"KeepInRectangle", "props":{"x":0.0, "y":0.0, "w":17.548, "h":8.052}}, "enabled":false}],
+  "targetDt":0.05
+ },
+ "params":{
+  "waypoints":[
+    {"x":{"exp":"10 m", "val":10.0}, "y":{"exp":"6.2 m", "val":6.2}, "heading":{"exp":"0 deg", "val":0.0}, "intervals":13, "split":false, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
+    {"x":{"exp":"11.6 m", "val":11.6}, "y":{"exp":"6.2 m", "val":6.2}, "heading":{"exp":"0 deg", "val":0.0}, "intervals":40, "split":false, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false}],
+  "constraints":[
+    {"from":"first", "to":null, "data":{"type":"StopPoint", "props":{}}, "enabled":true},
+    {"from":"last", "to":null, "data":{"type":"StopPoint", "props":{}}, "enabled":true},
+    {"from":"first", "to":"last", "data":{"type":"KeepInRectangle", "props":{"x":{"exp":"0 m", "val":0.0}, "y":{"exp":"0 m", "val":0.0}, "w":{"exp":"17.548 m", "val":17.548}, "h":{"exp":"8.052 m", "val":8.052}}}, "enabled":false}],
+  "targetDt":{
+   "exp":"0.05 s",
+   "val":0.05
+  }
+ },
+ "trajectory":{
+  "sampleType":"Swerve",
+  "waypoints":[0.0,0.63446],
+  "samples":[
+    {"t":0.0, "x":10.0, "y":6.2, "heading":0.0, "vx":0.0, "vy":0.0, "omega":0.0, "ax":25.03306, "ay":0.0, "alpha":0.0, "fx":[354.83763,354.83763,354.83763,354.83763], "fy":[0.0,0.0,0.0,0.0]},
+    {"t":0.0488, "x":10.02981, "y":6.2, "heading":0.0, "vx":1.22173, "vy":0.0, "omega":0.0, "ax":25.00723, "ay":0.0, "alpha":0.0, "fx":[354.47155,354.47155,354.47155,354.47155], "fy":[0.0,0.0,0.0,0.0]},
+    {"t":0.09761, "x":10.11922, "y":6.2, "heading":0.0, "vx":2.44221, "vy":0.0, "omega":0.0, "ax":15.15746, "ay":0.0, "alpha":0.0, "fx":[214.8534,214.8534,214.8534,214.8534], "fy":[0.0,0.0,0.0,0.0]},
+    {"t":0.14641, "x":10.25647, "y":6.2, "heading":0.0, "vx":3.18196, "vy":0.0, "omega":0.0, "ax":0.00021, "ay":0.0, "alpha":0.0, "fx":[0.00291,0.00291,0.00291,0.00291], "fy":[0.0,0.0,0.0,0.0]},
+    {"t":0.19522, "x":10.41176, "y":6.2, "heading":0.0, "vx":3.18197, "vy":0.0, "omega":0.0, "ax":0.0, "ay":0.0, "alpha":0.0, "fx":[0.0,0.0,0.0,0.0], "fy":[0.0,0.0,0.0,0.0]},
+    {"t":0.24402, "x":10.56706, "y":6.2, "heading":0.0, "vx":3.18197, "vy":0.0, "omega":0.0, "ax":0.0, "ay":0.0, "alpha":0.0, "fx":[0.0,0.0,0.0,0.0], "fy":[0.0,0.0,0.0,0.0]},
+    {"t":0.29283, "x":10.72235, "y":6.2, "heading":0.0, "vx":3.18197, "vy":0.0, "omega":0.0, "ax":0.0, "ay":0.0, "alpha":0.0, "fx":[0.0,0.0,0.0,0.0], "fy":[0.0,0.0,0.0,0.0]},
+    {"t":0.34163, "x":10.87765, "y":6.2, "heading":0.0, "vx":3.18197, "vy":0.0, "omega":0.0, "ax":0.0, "ay":0.0, "alpha":0.0, "fx":[0.0,0.0,0.0,0.0], "fy":[0.0,0.0,0.0,0.0]},
+    {"t":0.39044, "x":11.03294, "y":6.2, "heading":0.0, "vx":3.18197, "vy":0.0, "omega":0.0, "ax":0.0, "ay":0.0, "alpha":0.0, "fx":[0.0,0.0,0.0,0.0], "fy":[0.0,0.0,0.0,0.0]},
+    {"t":0.43924, "x":11.18824, "y":6.2, "heading":0.0, "vx":3.18197, "vy":0.0, "omega":0.0, "ax":-0.00021, "ay":0.0, "alpha":0.0, "fx":[-0.00291,-0.00291,-0.00291,-0.00291], "fy":[0.0,0.0,0.0,0.0]},
+    {"t":0.48805, "x":11.34353, "y":6.2, "heading":0.0, "vx":3.18196, "vy":0.0, "omega":0.0, "ax":-15.15746, "ay":0.0, "alpha":0.0, "fx":[-214.8534,-214.8534,-214.8534,-214.8534], "fy":[0.0,0.0,0.0,0.0]},
+    {"t":0.53685, "x":11.48078, "y":6.2, "heading":0.0, "vx":2.44221, "vy":0.0, "omega":0.0, "ax":-25.00723, "ay":0.0, "alpha":0.0, "fx":[-354.47155,-354.47155,-354.47155,-354.47155], "fy":[0.0,0.0,0.0,0.0]},
+    {"t":0.58566, "x":11.57019, "y":6.2, "heading":0.0, "vx":1.22173, "vy":0.0, "omega":0.0, "ax":-25.03306, "ay":0.0, "alpha":0.0, "fx":[-354.83763,-354.83763,-354.83763,-354.83763], "fy":[0.0,0.0,0.0,0.0]},
+    {"t":0.63446, "x":11.6, "y":6.2, "heading":0.0, "vx":0.0, "vy":0.0, "omega":0.0, "ax":0.0, "ay":0.0, "alpha":0.0, "fx":[0.0,0.0,0.0,0.0], "fy":[0.0,0.0,0.0,0.0]}],
+  "splits":[0]
+ },
+ "events":[]
+}
