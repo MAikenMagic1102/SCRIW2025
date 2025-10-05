@@ -5,7 +5,8 @@ import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.hardware.TalonFX;
 
 import edu.wpi.first.units.measure.Angle;
-
+import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.Command;
 
 
 public class Pivot {
@@ -20,22 +21,25 @@ Angle rotorPos = rotorPosSignal.getValue();
 
 public double currentAngle = rotorPosSignal.getValueAsDouble();
 
-    public void groundIntake() {
+    public Command groundIntake() {
         while (currentAngle >= 211 && currentAngle <= 209) {
-            motorPivot.setControl(motorPivotRequest.withOutput(1));
+            return Commands.runOnce(()-> motorPivot.setControl(motorPivotRequest.withOutput(1)));
         }
+        return Commands.none();
     }
     
-    public void reefIntake() {
+    public Command reefIntake() {
         while (currentAngle >= 121 && currentAngle <= 119) {
-            motorPivot.setControl(motorPivotRequest.withOutput(1));
+            return Commands.runOnce(()-> motorPivot.setControl(motorPivotRequest.withOutput(1)));
         }
+        return Commands.none();  // does nothing; satisfies the compiler
     }
 
-    public void homeScore() {
+    public Command homeScore() {
         while (currentAngle >= 1 && currentAngle <= -1) {
-            motorPivot.setControl(motorPivotRequest.withOutput(1));
+            return Commands.runOnce(()-> motorPivot.setControl(motorPivotRequest.withOutput(1)));
         }
+        return Commands.none();
     }
    
 };

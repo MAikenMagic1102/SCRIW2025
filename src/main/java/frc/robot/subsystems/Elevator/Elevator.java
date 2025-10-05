@@ -81,12 +81,13 @@ m_motorLeft.setControl(positionVoltage.withPosition(position));
     
 }
 
-    public void elevatorGroundIntake(){
-       sendElevatorToPoint(ElevatorConstants.ElevatorSetpoints.elevatorGroundIntake);
+    public Command elevatorGroundIntake(){
+       return Commands.runOnce(()-> sendElevatorToPoint(ElevatorConstants.ElevatorSetpoints.elevatorGroundIntake));
+
     };
 
-    public void elevatorLowerReef() {
-        sendElevatorToPoint(ElevatorConstants.ElevatorSetpoints.elevatorLowerReef);
+    public Command elevatorLowerReef() {
+        return Commands.runOnce(()-> sendElevatorToPoint(ElevatorConstants.ElevatorSetpoints.elevatorLowerReef));
     };
 
     public Command elevatorUpperReef() {
@@ -101,16 +102,16 @@ m_motorLeft.setControl(positionVoltage.withPosition(position));
         // sendElevatorToPoint(ElevatorConstants.ElevatorSetpoints.elevatorHome);
     };
 
-    public void elevatorScoreBarge() {
-        sendElevatorToPoint(ElevatorConstants.ElevatorSetpoints.barge);
+    public Command elevatorScoreBarge() {
+        return Commands.runOnce(()-> sendElevatorToPoint(ElevatorConstants.ElevatorSetpoints.barge));
     };
 
     public void elevatorTester() {
 
     };
 
-    public void elevatorProcessor() {
-        sendElevatorToPoint(ElevatorConstants.ElevatorSetpoints.processor);
+    public Command elevatorProcessor() {
+        return Commands.runOnce(()-> sendElevatorToPoint(ElevatorConstants.ElevatorSetpoints.processor));
     };
 
     public double getRotLeft() {

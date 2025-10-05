@@ -11,42 +11,40 @@ import frc.robot.subsystems.Pivot;
 public class SuperStructure extends Command{
     
     Elevator elevator = new Elevator();
-    Pivot pivot;
-    Intake intake;
+    Pivot pivot = new Pivot();
+    Intake intake = new Intake();
     private final int deafualtWait = 10;
 
-    public Command reefHighCommand; {
-        elevator.elevatorUpperReef();
-        new WaitCommand(deafualtWait); // #TODO make da waity shorter wen slo
-        pivot.reefIntake();
-        intake.intakeIn();
-    };
+    public Command reefHighCommand = Commands.sequence(
+        elevator.elevatorUpperReef(),
+        new WaitCommand(deafualtWait), // #TODO make da waity shorter wen slo
+        pivot.reefIntake(),
+        intake.intakeIn_CMD()
+    );
 
-    public Command reefLowCommand; {
-     return Commands.sequence(        
+    public final Command reefLowCommand = Commands.sequence(
             elevator.elevatorUpperReef(),
             new WaitCommand(deafualtWait), // #TODO make da waity shorter wen slo
             pivot.reefIntake(),
             intake.intakeIn_CMD()
-        );
-    };
+    );
         
-    public Command groundIntakeCommand; {
-        elevator.elevatorGroundIntake();
-        new WaitCommand(deafualtWait);
-        pivot.groundIntake();
-        intake.intakeIn();
-    };
+    public Command groundIntakeCommand = Commands.sequence(
+        elevator.elevatorGroundIntake(),
+        new WaitCommand(deafualtWait),
+        pivot.groundIntake(),
+        intake.intakeIn_CMD()
+    );
 
-    public Command processorScoreCommand; {
-        elevator.elevatorProcessor();
-        new WaitCommand(deafualtWait);
-        pivot.homeScore();
-    };
+    public Command processorScoreCommand = Commands.sequence(
+        elevator.elevatorProcessor(),
+        new WaitCommand(deafualtWait),
+        pivot.homeScore()
+    );
 
-    public Command bargeScoreCommand; {
-        elevator.elevatorScoreBarge();
-        new WaitCommand(deafualtWait);
+    public Command bargeScoreCommand = Commands.sequence(
+        elevator.elevatorScoreBarge(),
+        new WaitCommand(deafualtWait)
         // pivot.bargeScore(); TODO: make dis worky
-    };
+    );
 }
