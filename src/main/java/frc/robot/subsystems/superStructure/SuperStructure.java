@@ -6,9 +6,9 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.subsystems.Elevator.Elevator;
 import frc.robot.subsystems.Intake.Intake;
-import frc.robot.subsystems.Pivot;
+import frc.robot.subsystems.Pivot.Pivot;
 
-public class SuperStructure extends Command{
+public class SuperStructure extends SubsystemBase{
     
     Elevator elevator = new Elevator();
     Pivot pivot = new Pivot();
@@ -23,10 +23,10 @@ public class SuperStructure extends Command{
     );
 
     public final Command reefLowCommand = Commands.sequence(
-            elevator.elevatorUpperReef(),
-            new WaitCommand(deafualtWait), // #TODO make da waity shorter wen slo
-            pivot.reefIntake(),
-            intake.intakeIn_CMD()
+        elevator.elevatorUpperReef(),
+        new WaitCommand(deafualtWait), // #TODO make da waity shorter wen slo
+        pivot.reefIntake(),
+        intake.intakeIn_CMD()
     );
         
     public Command groundIntakeCommand = Commands.sequence(
@@ -47,4 +47,11 @@ public class SuperStructure extends Command{
         new WaitCommand(deafualtWait)
         // pivot.bargeScore(); TODO: make dis worky
     );
+
+    @Override
+    public void periodic(){
+        elevator.periodic();
+        intake.periodic();
+        pivot.periodic();
+    }
 }

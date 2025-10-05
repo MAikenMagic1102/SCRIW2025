@@ -7,8 +7,8 @@ import com.ctre.phoenix6.hardware.TalonFX;
 public class IntakeConstants {
     public final int intakeMoter = 0;
 
-    public final static int m_intakeMotor = 7;
-    public final static int intakeSensor = 8;
+    public final static int m_intakeMotor = 30;
+    public final static int intakeSensor = 0;
 
  
    public static final class IntakeSpeeds {

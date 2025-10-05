@@ -15,13 +15,10 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
-import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
-import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+
 
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
-import frc.robot.subsystems.Elevator.Elevator;
-import frc.robot.subsystems.Intake.Intake;
 import frc.robot.subsystems.superStructure.SuperStructure;
 
 
@@ -29,7 +26,7 @@ public class RobotContainer {
 
     
     private double MaxSpeed = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
-    private double MaxAngularRate = RotationsPerSecond.of(0.05).in(RadiansPerSecond); // 3/4 of a rotation per second max angular velocity
+    private double MaxAngularRate = RotationsPerSecond.of(0.75).in(RadiansPerSecond); // 3/4 of a rotation per second max angular velocity
 
     /* Setting up bindings for necessary control of the swerve drive platform */
     private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
@@ -55,9 +52,6 @@ public class RobotContainer {
         // and Y is defined as to the left according to WPILib convention.
         drivetrain.setDefaultCommand(
             // Drivetrain will execute this command periodically
-
-            
-
             drivetrain.applyRequest(() ->
                 drive.withVelocityX(-joystick.getLeftY() * MaxSpeed) // Drive forward with negative Y (forward)
                     .withVelocityY(-joystick.getLeftX() * MaxSpeed) // Drive left with negative X (left)
@@ -76,12 +70,12 @@ public class RobotContainer {
         //     point.withModuleDirection(new Rotation2d(-joystick.getLeftY(), -joystick.getLeftX()))
         // ));
         
-        joystick.x().whileTrue(superStructure.groundIntakeCommand);
-        joystick.y().whileTrue(superStructure.reefHighCommand);
+        joystick.x().onTrue(superStructure.groundIntakeCommand);
+        joystick.y().onTrue(superStructure.reefHighCommand);
         joystick.rightBumper().onTrue(superStructure.reefLowCommand);
 
-        joystick.rightTrigger().whileTrue(superStructure.processorScoreCommand);
-        joystick.leftTrigger().whileTrue(superStructure.bargeScoreCommand);
+        joystick.rightTrigger().onTrue(superStructure.processorScoreCommand);
+        joystick.leftTrigger().onTrue(superStructure.bargeScoreCommand);
         // TODO: fix ur friggin keybinds to make dem les scuffed and les conflicty
 
         // Run SysId routines when holding back/start and X/Y.
@@ -92,19 +86,13 @@ public class RobotContainer {
         // joystick.start().and(joystick.x()).whileTrue(drivetrain.sysIdQuasistatic(Direction.kReverse));
 
         // reset the field-centric heading on left bumper press
-        //joystick.leftBumper().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
+        joystick.start().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
 
         drivetrain.registerTelemetry(logger::telemeterize);
-      
-      
-            //   joystick.x().onTrue(new InstantCommand(()-> Intake.intakeIn()));
-            // }
-
-     
-        }
-        
-        public Command getAutonomousCommand() {
-            return Commands.print("No autonomous command configured");
-        }
     }
+        
+    public Command getAutonomousCommand() {
+        return Commands.print("No autonomous command configured");
+    }
+}
 

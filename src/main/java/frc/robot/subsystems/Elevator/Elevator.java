@@ -5,6 +5,9 @@ import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.InvertedValue;
+import com.ctre.phoenix6.signals.NeutralModeValue;
+
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -37,16 +40,21 @@ public class Elevator extends SubsystemBase{
     private double acceptableError = ElevatorConstants.errorRange;
     
     public Elevator(){
-        m_motorLeft = new TalonFX(ElevatorConstants.m_motorLeft_ID);
-        m_motorRight = new TalonFX(ElevatorConstants.m_motorRight_ID);
+        m_motorLeft = new TalonFX(ElevatorConstants.m_motorLeft_ID, "rio");
+        m_motorRight = new TalonFX(ElevatorConstants.m_motorRight_ID, "rio");
 
-        TalonFXConfiguration motorLeft_Configuration = new TalonFXConfiguration();
+        TalonFXConfiguration motor_Config = new TalonFXConfiguration();
 
         //TODO: all var & definitions
 
-        motorLeft_Configuration.Slot0.kP = 0;
+        //This has to be tuned for position control
+        motor_Config.Slot0.kP = 0;
+        //Set this correctly to make up positive and down negative
+        motor_Config.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
 
-        m_motorLeft.getConfigurator().apply(motorLeft_Configuration);
+        motor_Config.MotorOutput.NeutralMode = NeutralModeValue.Brake;
+
+        m_motorLeft.getConfigurator().apply(motor_Config);
         m_motorRight.setControl(new Follower(ElevatorConstants.m_motorLeft_ID, false));
     }
 
@@ -75,15 +83,12 @@ public class Elevator extends SubsystemBase{
         // }
     }
 
-public void setPosition(double position){
-
-m_motorLeft.setControl(positionVoltage.withPosition(position));
-    
-}
+    public void setPosition(double position){
+        m_motorLeft.setControl(positionVoltage.withPosition(position));
+    }
 
     public Command elevatorGroundIntake(){
        return Commands.runOnce(()-> sendElevatorToPoint(ElevatorConstants.ElevatorSetpoints.elevatorGroundIntake));
-
     };
 
     public Command elevatorLowerReef() {
@@ -150,7 +155,7 @@ m_motorLeft.setControl(positionVoltage.withPosition(position));
         motorRightRotStatSig = m_motorRight.getPosition();
 
         motorLeftRot = motorLeftRotStatSig.getValueAsDouble();
-     motorRightRot = motorRightRotStatSig.getValueAsDouble();
+        motorRightRot = motorRightRotStatSig.getValueAsDouble();
 
         SmartDashboard.setDefaultNumber("lefty", getRotLeft());
         SmartDashboard.setDefaultNumber("righty", getRotRight());
