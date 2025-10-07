@@ -1,167 +1,228 @@
+// Copyright (c) FIRST and other WPILib contributors.
+// Open Source Software; you can modify and/or share it under the terms of
+// the WPILib BSD license file in the root directory of this project.
+
 package frc.robot.subsystems.Elevator;
-import com.ctre.phoenix6.StatusSignal;
-import com.ctre.phoenix6.configs.TalonFXConfiguration;
+
+import com.ctre.phoenix6.StatusCode;
+import com.ctre.phoenix6.configs.Slot1Configs;
 import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.Follower;
+import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
-import com.ctre.phoenix6.signals.InvertedValue;
-import com.ctre.phoenix6.signals.NeutralModeValue;
+import com.ctre.phoenix6.sim.TalonFXSimState;
 
+import static edu.wpi.first.units.Units.Meters;
+import static edu.wpi.first.units.Units.MetersPerSecond;
+import static edu.wpi.first.units.Units.Radians;
+import static edu.wpi.first.units.Units.RadiansPerSecond;
+import static edu.wpi.first.units.Units.Second;
+
+import org.littletonrobotics.junction.Logger;
+
+import edu.wpi.first.units.DistanceUnit;
 import edu.wpi.first.units.measure.Angle;
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.units.measure.AngularVelocity;
+import edu.wpi.first.units.measure.Distance;
+import edu.wpi.first.units.measure.LinearVelocity;
+
+import edu.wpi.first.math.system.plant.DCMotor;
+import edu.wpi.first.wpilibj.DutyCycle;
+import edu.wpi.first.wpilibj.RobotController;
+import edu.wpi.first.wpilibj.simulation.BatterySim;
+import edu.wpi.first.wpilibj.simulation.ElevatorSim;
+import edu.wpi.first.wpilibj.simulation.RoboRioSim;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-public class Elevator extends SubsystemBase{
+public class Elevator extends SubsystemBase {
+  private TalonFX motorL;
+  private TalonFX motorR;
 
-    // Define TalonFX motor objects
+  private TalonFXSimState motorSim;
+  private DCMotor elevatorGearbox = DCMotor.getKrakenX60Foc(2);
 
-    public TalonFX m_motorLeft;
-    public TalonFX m_motorRight;
+  // AdvantageScope log paths
+  private final String loggerPath = "Subsystems/Elevator";
+  private final String motorLoggerPath = loggerPath + "/Motors";
+  private final String leftMotorLoggerPath = motorLoggerPath + "/LeftMotor";
+  private final String rightMotorLoggerPath = motorLoggerPath + "/RightMotor";
 
-    private double cmPerRot = ElevatorConstants.cmPerRot;
-    private double cmElevatorZero = ElevatorConstants.cmElevatorZero;
+  private ElevatorSim ElevatorSim = 
+  new ElevatorSim(
+          elevatorGearbox,
+          ElevatorConstants.elevatorGearing,
+          ElevatorConstants.elevatorMass,
+          ElevatorConstants.elevatorPullyRadius,
+          ElevatorConstants.elevatorMinHeightMeters,
+          ElevatorConstants.elevatorMaxHeightMeters,
+          true,
+          ElevatorConstants.elevatorStartingHeightMeters);
 
-    // Get motor rotations
-    private StatusSignal<Angle> motorLeftRotStatSig;
-    private StatusSignal<Angle> motorRightRotStatSig;
+  private DutyCycleOut dutyCycleOutput = new DutyCycleOut(0);
+  private PositionVoltage posVoltage = new PositionVoltage(0).withSlot(0);
+  private MotionMagicVoltage mmPosition = new MotionMagicVoltage(0).withSlot(1);
+  double kG;
+  double kV;
+  double kA;
+  double kP;
 
-    private double motorLeftRot;
-    private double motorRightRot;
+  private double targetPosition = 0;
 
-    final DutyCycleOut m_dutyLeft = new DutyCycleOut(0.0);
-    final DutyCycleOut m_dutyRight = new DutyCycleOut(0.0);
+  /** Creates a new Elevator. */
+  public Elevator() {
+    motorL = new TalonFX(ElevatorConstants.motorLID, ElevatorConstants.bus);
+    motorR = new TalonFX(ElevatorConstants.motorRID, ElevatorConstants.bus);
 
-    final PositionVoltage positionVoltage = new PositionVoltage(0);
-    
-    private double positionError;
-    private double acceptableError = ElevatorConstants.errorRange;
-    
-    public Elevator(){
-        m_motorLeft = new TalonFX(ElevatorConstants.m_motorLeft_ID, "rio");
-        m_motorRight = new TalonFX(ElevatorConstants.m_motorRight_ID, "rio");
+    motorR.setControl(new Follower(ElevatorConstants.motorLID, true)); 
 
-        TalonFXConfiguration motor_Config = new TalonFXConfiguration();
-
-        //TODO: all var & definitions
-
-        //This has to be tuned for position control
-        motor_Config.Slot0.kP = 0;
-        //Set this correctly to make up positive and down negative
-        motor_Config.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
-
-        motor_Config.MotorOutput.NeutralMode = NeutralModeValue.Brake;
-
-        m_motorLeft.getConfigurator().apply(motor_Config);
-        m_motorRight.setControl(new Follower(ElevatorConstants.m_motorLeft_ID, false));
+        /* Retry config apply up to 5 times, report if failure */
+    StatusCode status = StatusCode.StatusCodeNotInitialized;
+    for (int i = 0; i < 5; ++i) {
+      status = motorL.getConfigurator().apply(ElevatorConstants.config);
+      status = motorR.getConfigurator().apply(ElevatorConstants.config);
+      if (status.isOK()) break;
+    }
+    if(!status.isOK()) {
+      System.out.println("Could not apply configs, error code: " + status.toString());
     }
 
+    SmartDashboard.putNumber("elevatorKG", 0.0);
 
-    private void sendElevatorToPoint(double point){
-        // positionError = getError(point);
-        // double acceptableErrorLower = (1 - acceptableError) * point;
-        // double acceptableErrorUpper = (1 + acceptableError) * point;
-        // boolean withinError = acceptableErrorLower < positionError && positionError < acceptableErrorUpper;
-        // double motorPercent = 0.1;
+    SmartDashboard.putNumber("elevatorKV", 0.0);
 
-        // //Negative error means that our elevator is higher than the desired position
-        //  if(positionError < 0){
-        //      // Negative percent moves elevator down
-        //      motorPercent *= -1;
-        //  }
+    SmartDashboard.putNumber("elevatorKA", 0.0);
+   
+    SmartDashboard.putNumber("elevatorKP", 0.0);
 
-        // Keep applying power until elevator is within 5% of the desired location
-        // TODO: WARNING: UNTESTED CODE! NOT FOR USE ON ROBOT! FIGURE OUT SIM FIRST! FIGURE OUT WHICH WAY THE MOTORS ROTATE
-        // while(!withinError){
-        //     m_motorLeft.setControl(m_dutyLeft.withOutput(motorPercent));
-        //     m_motorRight.setControl(m_dutyRight.withOutput(motorPercent));
-            
-        //     positionError = getError(point);
-        //     withinError = acceptableErrorLower < positionError && positionError < acceptableErrorUpper;
-        // }
+    motorSim = motorL.getSimState();
+    motorL.setPosition(0);
+  }
+
+  @Override
+  public void periodic() {
+    if(aboveHalf()){
+      ElevatorConstants.driveSpeed = 0.3;
+    }else{
+      ElevatorConstants.driveSpeed = 1.0;
     }
+    // This method will be called once per scheduler run
 
-    public void setPosition(double position){
-        m_motorLeft.setControl(positionVoltage.withPosition(position));
-    }
-
-    public Command elevatorGroundIntake(){
-       return Commands.runOnce(()-> sendElevatorToPoint(ElevatorConstants.ElevatorSetpoints.elevatorGroundIntake));
-    };
-
-    public Command elevatorLowerReef() {
-        return Commands.runOnce(()-> sendElevatorToPoint(ElevatorConstants.ElevatorSetpoints.elevatorLowerReef));
-    };
-
-    public Command elevatorUpperReef() {
-        return Commands.runOnce(()-> sendElevatorToPoint(ElevatorConstants.ElevatorSetpoints.elevatorUpperReef));
-        
-        // sendElevatorToPoint(ElevatorConstants.ElevatorSetpoints.elevatorLowerReef);
-    };
-
-    public Command elevatorHome() {
-        return Commands.runOnce(()-> sendElevatorToPoint(ElevatorConstants.ElevatorSetpoints.elevatorHome));
-
-        // sendElevatorToPoint(ElevatorConstants.ElevatorSetpoints.elevatorHome);
-    };
-
-    public Command elevatorScoreBarge() {
-        return Commands.runOnce(()-> sendElevatorToPoint(ElevatorConstants.ElevatorSetpoints.barge));
-    };
-
-    public void elevatorTester() {
-
-    };
-
-    public Command elevatorProcessor() {
-        return Commands.runOnce(()-> sendElevatorToPoint(ElevatorConstants.ElevatorSetpoints.processor));
-    };
-
-    public double getRotLeft() {
-        motorLeftRot = m_motorLeft.getPosition().getValueAsDouble();
-        return motorLeftRot;
-    };
-
-    public double getRotRight() {
-        motorRightRot = m_motorRight.getPosition().getValueAsDouble();
-        return motorRightRot;
-    };
+    // Logging
+    Logger.recordOutput(loggerPath + "/at Goal", atGoal());
+    Logger.recordOutput(loggerPath + "/Lower Reef", lowerReef());
+    Logger.recordOutput(loggerPath + "/Upper Reef", upperReef());
+    Logger.recordOutput(loggerPath + "/above Half", aboveHalf());
+    Logger.recordOutput(loggerPath + "/Position Meters", getPositionMeters());
     
-    private double getElevatorHeight(){
-        // TODO: FLESH OUT! FIGURE OUT LEAD MOTOR!
-        double elevatorHeight = cmPerRot * motorLeftRot + cmElevatorZero;
-        return elevatorHeight;
-        // Will return the result of our equation defining elevator height based on rotations.
-        //TODO: Get elevator height equation. Zero is ABOUT 36 inches. Need to confirm.
-    };
+    Logger.recordOutput(leftMotorLoggerPath + "/Velocity", motorL.getVelocity().getValueAsDouble());
+    Logger.recordOutput(leftMotorLoggerPath+ "/Acceleration", motorL.getAcceleration().getValueAsDouble());
+    Logger.recordOutput(leftMotorLoggerPath + "/Voltage", motorL.getMotorVoltage().getValueAsDouble());
+    Logger.recordOutput(leftMotorLoggerPath + "/Stator Current", motorL.getStatorCurrent().getValueAsDouble());
+    Logger.recordOutput(leftMotorLoggerPath + "/Temp", motorL.getDeviceTemp().getValueAsDouble());
+    
+    Logger.recordOutput(rightMotorLoggerPath + "/Voltage", motorR.getMotorVoltage().getValueAsDouble());
+    Logger.recordOutput(rightMotorLoggerPath + "/Stator Current", motorR.getStatorCurrent().getValueAsDouble());
+    Logger.recordOutput(rightMotorLoggerPath + "/Temp", motorR.getDeviceTemp().getValueAsDouble());
+  }
 
+  @Override
+  public void simulationPeriodic() {
+    // This method will be called once per scheduler run
+    motorSim.setSupplyVoltage(RobotController.getBatteryVoltage());
 
-    private double getError(double setpoint){
-        // Return error between current height and desired position
-        return setpoint - getElevatorHeight();
-    };
+    ElevatorSim.setInput(motorSim.getMotorVoltage());
 
-    public void rotationOnePercent() {
-        m_motorLeft.setControl(m_dutyLeft.withOutput(0.01));
-        m_motorRight.setControl(m_dutyRight.withOutput(0.01));
-    };
+    ElevatorSim.update(0.02);
 
-    @Override
-    public void periodic(){
+    RoboRioSim.setVInVoltage(BatterySim.calculateDefaultBatteryLoadedVoltage(ElevatorSim.getCurrentDrawAmps()));
 
-        motorLeftRotStatSig = m_motorLeft.getPosition();
-        motorRightRotStatSig = m_motorRight.getPosition();
+    motorSim.setRawRotorPosition(ElevatorSim.getPositionMeters() / ElevatorConstants.conversion);
+    motorSim.setRotorVelocity(ElevatorSim.getVelocityMetersPerSecond() / ElevatorConstants.conversion);
+  }
 
-        motorLeftRot = motorLeftRotStatSig.getValueAsDouble();
-        motorRightRot = motorRightRotStatSig.getValueAsDouble();
+  public boolean atGoal() {
+    return Math.abs(targetPosition - getPositionMeters()) < ElevatorConstants.elevatorTolerance;
+  }
 
-        SmartDashboard.setDefaultNumber("lefty", getRotLeft());
-        SmartDashboard.setDefaultNumber("righty", getRotRight());
+  public boolean lowerReef(){
+    return getPositionMeters() > 0.24;
+  }
 
-        SmartDashboard.putNumber("Left Eeelvator rotations", getRotLeft()); 
-        SmartDashboard.putNumber("Right Eelevator rotations", getRotRight()); 
-        
-    };
-}
+  public boolean upperReef(){
+    return getPositionMeters() > 0.24;
+  }
+  public boolean aboveHalf(){
+    return getPositionMeters() > 0.5;
+  }
+
+  public boolean belowHalf(){
+
+    return getPositionMeters() < 0.5;
+  }
+
+  public double getPositionMeters() {
+    return rotationsToMeters(motorL.getRotorPosition().getValue()).in(Meters);
+  }
+
+  public void setPositionMeters(double height) {
+    targetPosition = height;
+    posVoltage.withPosition(height / ElevatorConstants.elevatorPullyCircum);
+    motorL.setControl(posVoltage);
+  }
+
+  public void setPositionMetersMM(double height) {
+    targetPosition = height;
+    mmPosition.withPosition(height / ElevatorConstants.elevatorPullyCircum).withEnableFOC(true);
+    motorL.setControl(mmPosition);
+  }
+
+  public Command setHeight(double height){
+    return runOnce(() -> setPositionMetersMM(height));
+  }
+
+  public void setOpenLoop(double input){
+    dutyCycleOutput.withOutput(input);
+
+    motorL.setControl(dutyCycleOutput);
+  }
+
+  public void setHome(){
+
+  }
+
+  public double getGoalPos(){
+    return 0;
+  }
+
+  public static Distance rotationsToMeters(Angle rotations) {
+    /* Apply gear ratio to input rotations */
+    var gearedRadians = rotations.in(Radians) / ElevatorConstants.elevatorGearing;
+    /* Then multiply the wheel radius by radians of rotation to get distance */
+    return ElevatorConstants.elevatorPullyRadiusDistance.times(gearedRadians);
+  }
+
+  public static Angle metersToRotations(Distance meters) {
+    /* Divide the distance by the wheel radius to get radians */
+    var wheelRadians = meters.in(Meters) / ElevatorConstants.elevatorPullyRadiusDistance.in(Meters);
+    /* Then multiply by gear ratio to get rotor rotations */
+    return Radians.of(wheelRadians * ElevatorConstants.elevatorGearing);
+  }
+
+  public static  LinearVelocity rotationsToMetersVel(AngularVelocity rotations) {
+    /* Apply gear ratio to input rotations */
+    var gearedRotations = rotations.in(RadiansPerSecond) / ElevatorConstants.elevatorGearing;
+    /* Then multiply the wheel radius by radians of rotation to get distance */
+    return ElevatorConstants.elevatorPullyRadiusDistance.per(Second).times(gearedRotations);
+  }
+
+  public static  AngularVelocity metersToRotationsVel(LinearVelocity meters) {
+    /* Divide the distance by the wheel radius to get radians */
+    var wheelRadians = meters.in(MetersPerSecond) / ElevatorConstants.elevatorPullyRadiusDistance.in(Meters);
+    /* Then multiply by gear ratio to get rotor rotations */
+    return RadiansPerSecond.of(wheelRadians * ElevatorConstants.elevatorGearing);
+  }
+
+} 
