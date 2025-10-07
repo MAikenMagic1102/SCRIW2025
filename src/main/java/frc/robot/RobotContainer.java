@@ -88,12 +88,12 @@ public class RobotContainer {
         //     point.withModuleDirection(new Rotation2d(-joystick.getLeftY(), -joystick.getLeftX()))
         // ));
         
-        joystick.x().onTrue(superStructure.groundIntakeCommand);
-        joystick.y().onTrue(superStructure.reefHighCommand);
-        joystick.rightBumper().onTrue(superStructure.reefLowCommand);
+        // joystick.x().onTrue(superStructure.groundIntakeCommand);
+        // joystick.y().onTrue(superStructure.reefHighCommand);
+        // joystick.rightBumper().onTrue(superStructure.reefLowCommand);
 
-        joystick.rightTrigger().onTrue(superStructure.processorScoreCommand);
-        joystick.leftTrigger().onTrue(superStructure.bargeScoreCommand);
+        // joystick.rightTrigger().onTrue(superStructure.processorScoreCommand);
+        // joystick.leftTrigger().onTrue(superStructure.bargeScoreCommand);
         // TODO: fix ur friggin keybinds to make dem les scuffed and les conflicty
 
         // Run SysId routines when holding back/start and X/Y.
@@ -108,11 +108,6 @@ public class RobotContainer {
 
         drivetrain.registerTelemetry(logger::telemeterize);
     }
-        
-    public Command getAutonomousCommand() {
-        return Commands.print("No autonomous command configured");
-    }
-}
 
     public Command getAutonomousCommand() {
         /* Run the routine selected from the auto chooser */
