@@ -113,7 +113,7 @@ public class Pivot extends SubsystemBase {
     }
   }
 
-  public boolean armHalfScored(){
+  public boolean pivotHalfScored(){
     return getAngleDegrees() < -100;
   }
 
@@ -162,6 +162,7 @@ public class Pivot extends SubsystemBase {
     armMotor.setControl(posVoltage);
     closedLoop = true;
   }
+  
 
   public Command setAngle(double angle){
     return runOnce(() -> setAnglePosition(angle));
