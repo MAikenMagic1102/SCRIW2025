@@ -167,6 +167,10 @@ public class Pivot extends SubsystemBase {
   public Command setAngle(double angle){
     return runOnce(() -> setAnglePosition(angle));
   }
+
+  public Command  setAngleCommand(double angle){
+    return runOnce(() -> setAngle(angle));
+  }
   
 
 }
