@@ -29,7 +29,7 @@ public class SuperStructure extends SubsystemBase {
 
   private scoreTarget currentTarget = scoreTarget.Lower;
 
-  private double armTargetAngle = 0.0;
+  private double pivotTargetAngle = 0.0;
   private double elevatorTargetHeight = 0.0;
 
   private boolean algaeNext = false;
@@ -48,11 +48,11 @@ public class SuperStructure extends SubsystemBase {
 
     Logger.recordOutput("Superstructure/ Score Target", currentTarget.toString());
     Logger.recordOutput("Superstructure/ Elevator Target Height", elevatorTargetHeight);
-    Logger.recordOutput("Superstructure/ Arm Target Angle", armTargetAngle);
+    Logger.recordOutput("Superstructure/ Arm Target Angle", pivotTargetAngle);
     Logger.recordOutput("Superstructure/ Algae Next", algaeNext);
 
     SmartDashboard.putNumber("Elevator Target Height", elevatorTargetHeight);
-    SmartDashboard.putNumber("Arm Target Angle", armTargetAngle);
+    SmartDashboard.putNumber("Arm Target Angle", pivotTargetAngle);
     SmartDashboard.putBoolean("Algae NEXT", algaeNext);
   }
 

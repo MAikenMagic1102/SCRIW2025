@@ -23,6 +23,7 @@ import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
+import frc.robot.subsystems.Intake.Intake;
 import frc.robot.subsystems.superStructure.SuperStructure;
 
 
@@ -45,22 +46,22 @@ public class RobotContainer {
 
     public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
 
-    private final AutoRoutines autoRoutines;
+    // private final AutoRoutines autoRoutines;
 
     private final AutoChooser autoChooser = new AutoChooser();
     public final SuperStructure superStructure = new SuperStructure();
 
     public RobotContainer() {
         configureBindings();
-        autoRoutines = new AutoRoutines(drivetrain);
+        // autoRoutines = new AutoRoutines(drivetrain);
 
-        autoChooser.addRoutine("RedMiddleForeward", autoRoutines::Red_Mid_Frwd);
-        autoChooser.addRoutine("RedLeftForeward", autoRoutines::Red_Lft_Frwd);
-        autoChooser.addRoutine("RedRightForeward", autoRoutines::Red_Rgt_Frwd);
+        // autoChooser.addRoutine("RedMiddleForeward", autoRoutines::Red_Mid_Frwd);
+        // autoChooser.addRoutine("RedLeftForeward", autoRoutines::Red_Lft_Frwd);
+        // autoChooser.addRoutine("RedRightForeward", autoRoutines::Red_Rgt_Frwd);
 
-        autoChooser.addRoutine("BlueMiddleForeward", autoRoutines::Blue_Mid_Frwd);
-        autoChooser.addRoutine("BlueLeftForeward", autoRoutines::Blue_Lft_Frwd);
-        autoChooser.addRoutine("BlueRightForeward", autoRoutines::Blue_Rgt_Frwd);
+        // autoChooser.addRoutine("BlueMiddleForeward", autoRoutines::Blue_Mid_Frwd);
+        // autoChooser.addRoutine("BlueLeftForeward", autoRoutines::Blue_Lft_Frwd);
+        // autoChooser.addRoutine("BlueRightForeward", autoRoutines::Blue_Rgt_Frwd);
 
         SmartDashboard.putData("Auto Chooser", autoChooser);
     }
@@ -87,6 +88,11 @@ public class RobotContainer {
         // joystick.b().whileTrue(drivetrain.applyRequest(() ->
         //     point.withModuleDirection(new Rotation2d(-joystick.getLeftY(), -joystick.getLeftX()))
         // ));
+
+
+        // joystick.b().onTrue(superStructure.setTargetL1().andThen(new PrepScore(superStructure)));
+        // joystick.a().onTrue(superstructure.setTargetL2().andThen(new PrepScore(superstructure, coralGripper, coralIntake)));
+        // joystick.x().onTrue(superstructure.setTargetL3().andThen(new PrepScore(superstructure, coralGripper, coralIntake)));
         
         // joystick.x().onTrue(superStructure.groundIntakeCommand);
         // joystick.y().onTrue(superStructure.reefHighCommand);

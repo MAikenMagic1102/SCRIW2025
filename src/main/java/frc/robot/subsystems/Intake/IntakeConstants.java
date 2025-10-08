@@ -11,8 +11,8 @@ public class IntakeConstants {
     public final static int intakeSensor = 0;
 
  
-   public static final class IntakeSpeeds {
-    public static final double intakeIn = 0.0;
+   public final class IntakeSpeeds {
+    public static double intakeIn = 0.0;
     public static final double intakeOut = 0.0;
     public static final double rest = 0.0;
     public static final double hold = 0.0;
@@ -28,6 +28,8 @@ public class IntakeConstants {
 
    public static final double MaxIntakeSpeed = 0.0;
    public static final double MinIntakeSpeed = 0.0;
+
+
 
     
 
