@@ -25,6 +25,10 @@ import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.Intake.Intake;
 import frc.robot.subsystems.superStructure.SuperStructure;
+import frc.robot.subsystems.Intake.Intake;
+import frc.robot.subsystems.Pivot.Pivot;
+import frc.robot.subsystems.Intake.IntakeConstants;
+import frc.robot.subsystems.Pivot.PivotConstants;
 
 
 public class RobotContainer {
@@ -94,10 +98,12 @@ public class RobotContainer {
         // joystick.a().onTrue(superstructure.setTargetL2().andThen(new PrepScore(superstructure, coralGripper, coralIntake)));
         // joystick.x().onTrue(superstructure.setTargetL3().andThen(new PrepScore(superstructure, coralGripper, coralIntake)));
         
-        // joystick.x().onTrue(superStructure.groundIntakeCommand);
-        // joystick.y().onTrue(superStructure.reefHighCommand);
-        // joystick.rightBumper().onTrue(superStructure.reefLowCommand);
-
+        joystick.x().onTrue(superStructure.setElevatorToScore());
+        joystick.y().onTrue(superStructure.setTargetL1());
+        joystick.leftTrigger()
+        .whileTrue(new IntakeDeploy(Intake).andThen(new IntakeHome(superstructure, coralIntake))
+        .andThen(new InstantCommand(() -> coralIntake.setIntake())
+        .alongWith(new InstantCommand(() -> coralGripper.setIntake()))))
         // joystick.rightTrigger().onTrue(superStructure.processorScoreCommand);
         // joystick.leftTrigger().onTrue(superStructure.bargeScoreCommand);
         // TODO: fix ur friggin keybinds to make dem les scuffed and les conflicty
