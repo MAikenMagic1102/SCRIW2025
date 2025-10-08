@@ -10,31 +10,34 @@ import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
-import frc.robot.subsystems.Superstructure;
-;
+import frc.robot.subsystems.superStructure.SuperStructure;
+import frc.robot.subsystems.Intake.Intake;
+import frc.robot.subsystems.Pivot.Pivot;
+import frc.robot.subsystems.Intake.IntakeConstants;
+import frc.robot.subsystems.Pivot.PivotConstants;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class PrepScore extends SequentialCommandGroup {
   /** Creates a new PrepScore. */
-  public PrepScore(Superstructure superstructure, CoralGripper coralGripper, CoralIntake coralIntake) {
+  public PrepScore(SuperStructure superstructure, Intake Intake, Pivot Pivot) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-      new InstantCommand(() -> coralGripper.setHold()),
+      new InstantCommand(() -> Intake.hold()),
 
       new ConditionalCommand(new InstantCommand(), 
       
-      coralIntake.setAngleCommand(CoralIntakeConstants.floorIntake)
+      Pivot.setAngleCommand(PivotConstants.lowerReef)
       .alongWith(superstructure.setElevatorToScoreSafe())
       .andThen(new WaitUntilCommand(superstructure::isElevatorSafe)), 
       
-      superstructure::armHalfScored),
+      Pivot::pivotHalfScored),
 
-      superstructure.setArmToScore(), 
+      superstructure.setElevatorToScore(), 
 
-      new WaitUntilCommand(superstructure::armHalfScored), 
+      new WaitUntilCommand(Pivot::pivotHalfScored), 
 
       superstructure.setElevatorToScore()
     );
