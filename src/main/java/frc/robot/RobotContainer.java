@@ -19,7 +19,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
-
+import frc.robot.commands.PrepScore;
 
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
@@ -54,6 +54,8 @@ public class RobotContainer {
 
     private final AutoChooser autoChooser = new AutoChooser();
     public final SuperStructure superStructure = new SuperStructure();
+    public final Pivot pivot = new Pivot();
+    public final Intake intake = new Intake();
 
     public RobotContainer() {
         configureBindings();
@@ -100,11 +102,12 @@ public class RobotContainer {
         
         joystick.x().onTrue(superStructure.setElevatorToScore());
         joystick.y().onTrue(superStructure.setTargetL1());
-        joystick.leftTrigger()
-        .whileTrue(new IntakeDeploy(Intake).andThen(new IntakeHome(superstructure, coralIntake))
-        .andThen(new InstantCommand(() -> coralIntake.setIntake())
-        .alongWith(new InstantCommand(() -> coralGripper.setIntake()))))
-        // joystick.rightTrigger().onTrue(superStructure.processorScoreCommand);
+       
+        // joystick.leftTrigger()
+        // .onTrue(Intake.intakeIn_CMD()).onFalse();
+
+        joystick.a().onTrue(superStructure.setTargetL1().andThen(new PrepScore(superStructure, intake, pivot)));
+        
         // joystick.leftTrigger().onTrue(superStructure.bargeScoreCommand);
         // TODO: fix ur friggin keybinds to make dem les scuffed and les conflicty
 
