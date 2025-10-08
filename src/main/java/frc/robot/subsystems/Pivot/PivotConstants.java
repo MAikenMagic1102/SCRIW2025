@@ -20,17 +20,17 @@ import edu.wpi.first.math.util.Units;
 /** Add your docs here. */
 public class PivotConstants {
     public static String busname = "rio";
-    public static int motorID = 40;
+    public static int motorID = 32;
     public static int cancoderID = 311;
 
-    public static double armGearing = 89.83;
-    public static double armGearingCANcoder = 3.5;
-    public static double armRotorToSensor = 25.67;
-    public static double armLength = Units.inchesToMeters(25);
-    public static double armMass = Units.lbsToKilograms(5.0);
-    public static double armMinAngle = Units.degreesToRadians(-255.0);
-    public static double armMaxAngle = Units.degreesToRadians(255.0);
-    public static double armStartingAngle = Units.degreesToRadians(0.0);
+    public static double pivotGearing = 89.83;
+    public static double pivotGearingCANcoder = 3.5;
+    public static double pivotRotorToSensor = 25.67;
+    public static double pivotLength = Units.inchesToMeters(25);
+    public static double pivotMass = Units.lbsToKilograms(5.0);
+    public static double pivotMinAngle = Units.degreesToRadians(-255.0);
+    public static double pivotMaxAngle = Units.degreesToRadians(255.0);
+    public static double pivotStartingAngle = Units.degreesToRadians(0.0);
 
     public static double positionTolerence = 7.0;
 

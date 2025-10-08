@@ -24,28 +24,29 @@ import edu.wpi.first.wpilibj.simulation.RoboRioSim;
 import edu.wpi.first.wpilibj.simulation.SingleJointedArmSim;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.Elevator.ElevatorConstants;
 
 public class Pivot extends SubsystemBase {
-  private TalonFX armMotor;
+  private TalonFX pivotMotor;
   private TalonFXSimState motorSim;
   private CANcoderSimState cancoderSim;
 
-  private CANcoder armCaNcoder;
+  private static CANcoder pivotCaNcoder;
 
-  private DCMotor armGearbox = DCMotor.getKrakenX60(1);
+  private DCMotor pivotGearbox = DCMotor.getKrakenX60(1);
 
   private SingleJointedArmSim armSim = 
     new SingleJointedArmSim(
-      armGearbox,
-      PivotConstants.armGearing,
-      SingleJointedArmSim.estimateMOI(PivotConstants.armLength, PivotConstants.armMass),
-      PivotConstants.armLength,
-      PivotConstants.armMinAngle,
-      PivotConstants.armMaxAngle,
+      pivotGearbox,
+      PivotConstants.pivotGearing,
+      SingleJointedArmSim.estimateMOI(PivotConstants.pivotLength, PivotConstants.pivotMass),
+      PivotConstants.pivotLength,
+      PivotConstants.pivotMinAngle,
+      PivotConstants.pivotMaxAngle,
       true,
-      PivotConstants.armStartingAngle);
+      PivotConstants.pivotStartingAngle);
 
   private DutyCycleOut dutyOut = new DutyCycleOut(0);
   private PositionVoltage posVoltage = new PositionVoltage(0).withSlot(0);
@@ -60,13 +61,13 @@ public class Pivot extends SubsystemBase {
   private final String motorLoggerPath = loggerPath + "/Motor";
 /** Creates a new Arm. */
   public Pivot() {
-    armMotor = new TalonFX(PivotConstants.motorID, PivotConstants.busname);
-    armCaNcoder = new CANcoder(PivotConstants.cancoderID, PivotConstants.busname);
+    pivotMotor = new TalonFX(PivotConstants.motorID, PivotConstants.busname);
+    pivotCaNcoder = new CANcoder(PivotConstants.cancoderID, PivotConstants.busname);
 
     /* Retry config apply up to 5 times, report if failure */
     StatusCode status = StatusCode.StatusCodeNotInitialized;
     for (int i = 0; i < 5; ++i) {
-      status = armMotor.getConfigurator().apply(PivotConstants.config);
+      status = pivotMotor.getConfigurator().apply(PivotConstants.config);
       if (status.isOK()) break;
     }
     if(!status.isOK()) {
@@ -76,7 +77,7 @@ public class Pivot extends SubsystemBase {
     /* Retry config apply up to 5 times, report if failure */
     StatusCode ccstatus = StatusCode.StatusCodeNotInitialized;
     for (int i = 0; i < 5; ++i) {
-      ccstatus = armCaNcoder.getConfigurator().apply(PivotConstants.ccconfig);
+      ccstatus = pivotCaNcoder.getConfigurator().apply(PivotConstants.ccconfig);
       if (ccstatus.isOK()) break;
     }
     if(!ccstatus.isOK()) {
@@ -84,15 +85,15 @@ public class Pivot extends SubsystemBase {
     }
 
     //armMotor.setPosition(armCaNcoder.getAbsolutePosition().getValueAsDouble() / ArmConstants.armRotorToSensor);
-    motorSim = armMotor.getSimState();
-    cancoderSim = armCaNcoder.getSimState();
-    armCaNcoder.setPosition(0);
+    motorSim = pivotMotor.getSimState();
+    cancoderSim = pivotCaNcoder.getSimState();
+    pivotCaNcoder.setPosition(0);
   }
 
   @Override
   public void periodic() {
 
-    if(armAtScoring()){
+    if(pivotAtScoring()){
       PivotConstants.driveSpeed = 0.15;
     }else{
       PivotConstants.driveSpeed = 1.0;
@@ -104,12 +105,12 @@ public class Pivot extends SubsystemBase {
     Logger.recordOutput(loggerPath + "/Angle", getAngleDegrees());
     Logger.recordOutput(loggerPath + "/At Goal", atGoal());
 
-    Logger.recordOutput(motorLoggerPath + "/Motor Voltage", armMotor.getMotorVoltage().getValueAsDouble());
-    Logger.recordOutput(motorLoggerPath + "/Stator Current", armMotor.getStatorCurrent().getValueAsDouble());
-    Logger.recordOutput(motorLoggerPath + "/Motor Temp", armMotor.getDeviceTemp().getValueAsDouble());
+    Logger.recordOutput(motorLoggerPath + "/Motor Voltage", pivotMotor.getMotorVoltage().getValueAsDouble());
+    Logger.recordOutput(motorLoggerPath + "/Stator Current", pivotMotor.getStatorCurrent().getValueAsDouble());
+    Logger.recordOutput(motorLoggerPath + "/Motor Temp", pivotMotor.getDeviceTemp().getValueAsDouble());
     
     if(closedLoop){
-      Logger.recordOutput("Arm/ Setpoint", armMotor.getClosedLoopReference().getValueAsDouble());
+      Logger.recordOutput("Arm/ Setpoint", pivotMotor.getClosedLoopReference().getValueAsDouble());
     }
   }
 
@@ -130,36 +131,42 @@ public class Pivot extends SubsystemBase {
     RoboRioSim.setVInVoltage(
         BatterySim.calculateDefaultBatteryLoadedVoltage(armSim.getCurrentDrawAmps()));
 
-    motorSim.setRawRotorPosition(Units.radiansToRotations(armSim.getAngleRads()) * PivotConstants.armGearing);
-    cancoderSim.setRawPosition(Units.radiansToRotations(armSim.getAngleRads()) * PivotConstants.armGearingCANcoder);
+    motorSim.setRawRotorPosition(Units.radiansToRotations(armSim.getAngleRads()) * PivotConstants.pivotGearing);
+    cancoderSim.setRawPosition(Units.radiansToRotations(armSim.getAngleRads()) * PivotConstants.pivotGearingCANcoder);
   }
 
-  public double getAngleDegrees(){
-    return Units.rotationsToDegrees(armCaNcoder.getPosition().getValueAsDouble() / PivotConstants.armGearingCANcoder);
+  public static double getAngleDegrees(){
+    return Units.rotationsToDegrees(pivotCaNcoder.getPosition().getValueAsDouble() / PivotConstants.pivotGearingCANcoder);
   }
 
-  public boolean armAtScoring(){
+  public boolean pivotAtScoring(){
     return getAngleDegrees() < -180;
   }
 
-  public boolean armAtHome(){
+  public boolean pivotAtHome(){
+    Pivot.getAngleDegrees();
     return getAngleDegrees() > -8 && getAngleDegrees() < 8;
   }
+
+    public Command pivotAtHome_CMD(){
+        return Commands.run(() ->pivotAtHome());
+    }
   
   public boolean atGoal(){
     return Math.abs(targetPosition - getAngleDegrees()) < PivotConstants.positionTolerence;
+    
   }
 
   public void setOpenLoop(double demand){
     dutyOut.withOutput(demand);
-    armMotor.setControl(dutyOut);
+    pivotMotor.setControl(dutyOut);
     closedLoop = false;
   }
 
   public void setAnglePosition(double angle){
     targetPosition = angle;
     posVoltage.withPosition(Units.degreesToRotations(angle));
-    armMotor.setControl(posVoltage);
+    pivotMotor.setControl(posVoltage);
     closedLoop = true;
   }
   

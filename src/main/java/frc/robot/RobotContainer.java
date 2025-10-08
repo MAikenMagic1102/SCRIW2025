@@ -23,6 +23,7 @@ import frc.robot.commands.PrepScore;
 
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
+import frc.robot.subsystems.Elevator.Elevator;
 import frc.robot.subsystems.Intake.Intake;
 import frc.robot.subsystems.superStructure.SuperStructure;
 import frc.robot.subsystems.Intake.Intake;
@@ -56,6 +57,7 @@ public class RobotContainer {
     public final SuperStructure superStructure = new SuperStructure();
     public final Pivot pivot = new Pivot();
     public final Intake intake = new Intake();
+    public final Elevator elevator = new Elevator();
 
     public RobotContainer() {
         configureBindings();
@@ -100,13 +102,17 @@ public class RobotContainer {
         // joystick.a().onTrue(superstructure.setTargetL2().andThen(new PrepScore(superstructure, coralGripper, coralIntake)));
         // joystick.x().onTrue(superstructure.setTargetL3().andThen(new PrepScore(superstructure, coralGripper, coralIntake)));
         
-        joystick.x().onTrue(superStructure.setElevatorToScore());
-        joystick.y().onTrue(superStructure.setTargetL1());
-       
-        // joystick.leftTrigger()
-        // .onTrue(Intake.intakeIn_CMD()).onFalse();
+        // joystick.x().onTrue(superStructure.setElevatorToScore());
+        // joystick.y().onTrue(superStructure.setTargetL1());
+        joystick.b().onTrue(superStructure.runElevatorUp()).onFalse(superStructure.stopElevator());
+        joystick.y().onTrue(superStructure.runElevatorDown()).onFalse(superStructure.stopElevator());
+        joystick.x().onTrue(superStructure.goIntake()).onFalse(superStructure.stopIntake());
+        joystick.leftBumper().onTrue(superStructure.outIntake()).onFalse(superStructure.stopIntake());
+        joystick.a().onTrue(superStructure.goPivot()).onFalse(superStructure.stopPivot());
+        joystick.rightBumper().onTrue(superStructure.noPivot()).onFalse(superStructure.stopPivot());
+     
 
-        joystick.a().onTrue(superStructure.setTargetL1().andThen(new PrepScore(superStructure, intake, pivot)));
+        // joystick.a().onTrue(superStructure.setTargetL1().andThen(new PrepScore(superStructure, intake, pivot)));
         
         // joystick.leftTrigger().onTrue(superStructure.bargeScoreCommand);
         // TODO: fix ur friggin keybinds to make dem les scuffed and les conflicty
