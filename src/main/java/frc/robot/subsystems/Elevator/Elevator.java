@@ -19,6 +19,11 @@ import static edu.wpi.first.units.Units.Radians;
 import static edu.wpi.first.units.Units.RadiansPerSecond;
 import static edu.wpi.first.units.Units.Second;
 
+<<<<<<< Updated upstream
+=======
+//import org.littletonrobotics.junction.Logger;
+
+>>>>>>> Stashed changes
 import edu.wpi.first.units.DistanceUnit;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.AngularVelocity;
@@ -107,7 +112,7 @@ public class Elevator extends SubsystemBase {
       ElevatorConstants.driveSpeed = 1.0;
     }
     // This method will be called once per scheduler run
-
+    //TODO: make a replacement for the littletonrobotics logger
     // Logging
     /*Logger.recordOutput(loggerPath + "/at Goal", atGoal());
     Logger.recordOutput(loggerPath + "/Lower Reef", lowerReef());
