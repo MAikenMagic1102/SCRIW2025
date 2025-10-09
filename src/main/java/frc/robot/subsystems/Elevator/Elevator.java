@@ -19,11 +19,8 @@ import static edu.wpi.first.units.Units.Radians;
 import static edu.wpi.first.units.Units.RadiansPerSecond;
 import static edu.wpi.first.units.Units.Second;
 
-<<<<<<< Updated upstream
-=======
 //import org.littletonrobotics.junction.Logger;
 
->>>>>>> Stashed changes
 import edu.wpi.first.units.DistanceUnit;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.AngularVelocity;
