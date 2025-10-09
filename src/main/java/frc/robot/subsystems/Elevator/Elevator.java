@@ -19,8 +19,6 @@ import static edu.wpi.first.units.Units.Radians;
 import static edu.wpi.first.units.Units.RadiansPerSecond;
 import static edu.wpi.first.units.Units.Second;
 
-import org.littletonrobotics.junction.Logger;
-
 import edu.wpi.first.units.DistanceUnit;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.AngularVelocity;
@@ -111,7 +109,7 @@ public class Elevator extends SubsystemBase {
     // This method will be called once per scheduler run
 
     // Logging
-    Logger.recordOutput(loggerPath + "/at Goal", atGoal());
+    /*Logger.recordOutput(loggerPath + "/at Goal", atGoal());
     Logger.recordOutput(loggerPath + "/Lower Reef", lowerReef());
     Logger.recordOutput(loggerPath + "/Upper Reef", upperReef());
     Logger.recordOutput(loggerPath + "/above Half", aboveHalf());
@@ -126,6 +124,7 @@ public class Elevator extends SubsystemBase {
     Logger.recordOutput(rightMotorLoggerPath + "/Voltage", motorR.getMotorVoltage().getValueAsDouble());
     Logger.recordOutput(rightMotorLoggerPath + "/Stator Current", motorR.getStatorCurrent().getValueAsDouble());
     Logger.recordOutput(rightMotorLoggerPath + "/Temp", motorR.getDeviceTemp().getValueAsDouble());
+    */
   }
 
   @Override

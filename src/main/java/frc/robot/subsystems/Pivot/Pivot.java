@@ -4,8 +4,6 @@
 
 package frc.robot.subsystems.Pivot;
 
-import org.littletonrobotics.junction.Logger;
-
 import com.ctre.phoenix6.StatusCode;
 import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
@@ -101,15 +99,15 @@ public class Pivot extends SubsystemBase {
 
 
     // Logging
-    Logger.recordOutput(loggerPath + "/Angle", getAngleDegrees());
-    Logger.recordOutput(loggerPath + "/At Goal", atGoal());
+    //Logger.recordOutput(loggerPath + "/Angle", getAngleDegrees());
+    //Logger.recordOutput(loggerPath + "/At Goal", atGoal());
 
-    Logger.recordOutput(motorLoggerPath + "/Motor Voltage", armMotor.getMotorVoltage().getValueAsDouble());
-    Logger.recordOutput(motorLoggerPath + "/Stator Current", armMotor.getStatorCurrent().getValueAsDouble());
-    Logger.recordOutput(motorLoggerPath + "/Motor Temp", armMotor.getDeviceTemp().getValueAsDouble());
+    //Logger.recordOutput(motorLoggerPath + "/Motor Voltage", armMotor.getMotorVoltage().getValueAsDouble());
+    //Logger.recordOutput(motorLoggerPath + "/Stator Current", armMotor.getStatorCurrent().getValueAsDouble());
+   // Logger.recordOutput(motorLoggerPath + "/Motor Temp", armMotor.getDeviceTemp().getValueAsDouble());
     
     if(closedLoop){
-      Logger.recordOutput("Arm/ Setpoint", armMotor.getClosedLoopReference().getValueAsDouble());
+      //Logger.recordOutput("Arm/ Setpoint", armMotor.getClosedLoopReference().getValueAsDouble());
     }
   }
 

@@ -4,8 +4,6 @@
 
 package frc.robot.subsystems.superStructure;
 
-import org.littletonrobotics.junction.Logger;
-
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -46,10 +44,10 @@ public class SuperStructure extends SubsystemBase {
     // mech.update(elevator.getPositionMeters());
     elevatorTargetHeight = getScoreTargetElevatorPos();
 
-    Logger.recordOutput("Superstructure/ Score Target", currentTarget.toString());
-    Logger.recordOutput("Superstructure/ Elevator Target Height", elevatorTargetHeight);
-    Logger.recordOutput("Superstructure/ Arm Target Angle", pivotTargetAngle);
-    Logger.recordOutput("Superstructure/ Algae Next", algaeNext);
+    //Logger.recordOutput("Superstructure/ Score Target", currentTarget.toString());
+    //Logger.recordOutput("Superstructure/ Elevator Target Height", elevatorTargetHeight);
+    //Logger.recordOutput("Superstructure/ Arm Target Angle", pivotTargetAngle);
+    //Logger.recordOutput("Superstructure/ Algae Next", algaeNext);
 
     SmartDashboard.putNumber("Elevator Target Height", elevatorTargetHeight);
     SmartDashboard.putNumber("Arm Target Angle", pivotTargetAngle);
