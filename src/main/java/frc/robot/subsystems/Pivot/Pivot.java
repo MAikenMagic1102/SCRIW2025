@@ -30,22 +30,22 @@ import frc.robot.subsystems.Elevator.ElevatorConstants;
 public class Pivot extends SubsystemBase {
   private TalonFX armMotor;
   private TalonFXSimState motorSim;
-  private CANcoderSimState cancoderSim;
+  // private CANcoderSimState cancoderSim;
 
-  private CANcoder armCaNcoder;
+  // private CANcoder armCaNcoder;
 
   private DCMotor armGearbox = DCMotor.getKrakenX60(1);
 
   private SingleJointedArmSim armSim = 
     new SingleJointedArmSim(
       armGearbox,
-      PivotConstants.armGearing,
-      SingleJointedArmSim.estimateMOI(PivotConstants.armLength, PivotConstants.armMass),
-      PivotConstants.armLength,
-      PivotConstants.armMinAngle,
-      PivotConstants.armMaxAngle,
+      PivotConstants.pivotGearing,
+      SingleJointedArmSim.estimateMOI(PivotConstants.pivotLength, PivotConstants.pivotMass),
+      PivotConstants.pivotLength,
+      PivotConstants.pivotMinAngle,
+      PivotConstants.pivotMaxAngle,
       true,
-      PivotConstants.armStartingAngle);
+      PivotConstants.pivotStartingAngle);
 
   private DutyCycleOut dutyOut = new DutyCycleOut(0);
   private PositionVoltage posVoltage = new PositionVoltage(0).withSlot(0);
@@ -61,7 +61,7 @@ public class Pivot extends SubsystemBase {
 /** Creates a new Arm. */
   public Pivot() {
     armMotor = new TalonFX(PivotConstants.motorID, PivotConstants.busname);
-    armCaNcoder = new CANcoder(PivotConstants.cancoderID, PivotConstants.busname);
+    // armCaNcoder = new CANcoder(PivotConstants.cancoderID, PivotConstants.busname);
 
     /* Retry config apply up to 5 times, report if failure */
     StatusCode status = StatusCode.StatusCodeNotInitialized;
@@ -73,30 +73,30 @@ public class Pivot extends SubsystemBase {
       System.out.println("Could not apply configs, error code: " + status.toString());
     }
 
-    /* Retry config apply up to 5 times, report if failure */
-    StatusCode ccstatus = StatusCode.StatusCodeNotInitialized;
-    for (int i = 0; i < 5; ++i) {
-      ccstatus = armCaNcoder.getConfigurator().apply(PivotConstants.ccconfig);
-      if (ccstatus.isOK()) break;
-    }
-    if(!ccstatus.isOK()) {
-      System.out.println("Could not apply configs, error code: " + ccstatus.toString());
-    }
+    // /* Retry config apply up to 5 times, report if failure */
+    // StatusCode ccstatus = StatusCode.StatusCodeNotInitialized;
+    // for (int i = 0; i < 5; ++i) {
+    //   ccstatus = armCaNcoder.getConfigurator().apply(PivotConstants.ccconfig);
+    //   if (ccstatus.isOK()) break;
+    // }
+    // if(!ccstatus.isOK()) {
+    //   System.out.println("Could not apply configs, error code: " + ccstatus.toString());
+    // }
 
     //armMotor.setPosition(armCaNcoder.getAbsolutePosition().getValueAsDouble() / ArmConstants.armRotorToSensor);
     motorSim = armMotor.getSimState();
-    cancoderSim = armCaNcoder.getSimState();
-    armCaNcoder.setPosition(0);
+    // cancoderSim = armCaNcoder.getSimState();
+    // armCaNcoder.setPosition(0);
   }
 
   @Override
   public void periodic() {
 
-    if(armAtScoring()){
-      PivotConstants.driveSpeed = 0.15;
-    }else{
-      PivotConstants.driveSpeed = 1.0;
-    }
+    // if(armAtScoring()){
+    //   PivotConstants.driveSpeed = 0.15;
+    // }else{
+    //   PivotConstants.driveSpeed = 1.0;
+    // }
     // This method will be called once per scheduler run
 
 
@@ -121,7 +121,7 @@ public class Pivot extends SubsystemBase {
   public void simulationPeriodic() {
     // This method will be called once per scheduler run
     motorSim.setSupplyVoltage(RobotController.getBatteryVoltage());
-    cancoderSim.setSupplyVoltage(RobotController.getBatteryVoltage());
+    // cancoderSim.setSupplyVoltage(RobotController.getBatteryVoltage());
     
     armSim.setInput(motorSim.getMotorVoltage());
 
@@ -130,12 +130,12 @@ public class Pivot extends SubsystemBase {
     RoboRioSim.setVInVoltage(
         BatterySim.calculateDefaultBatteryLoadedVoltage(armSim.getCurrentDrawAmps()));
 
-    motorSim.setRawRotorPosition(Units.radiansToRotations(armSim.getAngleRads()) * PivotConstants.armGearing);
-    cancoderSim.setRawPosition(Units.radiansToRotations(armSim.getAngleRads()) * PivotConstants.armGearingCANcoder);
+    motorSim.setRawRotorPosition(Units.radiansToRotations(armSim.getAngleRads()) * PivotConstants.pivotGearing);
+    // cancoderSim.setRawPosition(Units.radiansToRotations(armSim.getAngleRads()) * PivotConstants.armGearingCANcoder);
   }
 
   public double getAngleDegrees(){
-    return Units.rotationsToDegrees(armCaNcoder.getPosition().getValueAsDouble() / PivotConstants.armGearingCANcoder);
+    // return Units.rotationsToDegrees(armCaNcoder.getPosition().getValueAsDouble() / PivotConstants.armGearingCANcoder);
   }
 
   public boolean armAtScoring(){

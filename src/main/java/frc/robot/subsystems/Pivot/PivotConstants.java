@@ -23,15 +23,9 @@ public class PivotConstants {
     public static int motorID = 40;
     public static int cancoderID = 311;
 
-<<<<<<< Updated upstream
-    public static double pivotGearing = 56;
-    public static double pivotGearingCANcoder = 56;
-    // public static double pivotRotorToSensor = 25.67;
-=======
     public static double pivotGearing = 134;
     public static double pivotGearingCANcoder = 3.5;
     public static double pivotRotorToSensor = 25.67;
->>>>>>> Stashed changes
     public static double pivotLength = Units.inchesToMeters(25);
     public static double pivotMass = Units.lbsToKilograms(5.0);
     public static double pivotMinAngle = Units.degreesToRadians(-255.0);
