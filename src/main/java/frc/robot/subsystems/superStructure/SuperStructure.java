@@ -10,10 +10,16 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.Elevator.Elevator;
 import frc.robot.subsystems.Elevator.ElevatorConstants;
 // import frc.robot.subsystems.Mechanism.SuperStructureMechanism;
+<<<<<<< Updated upstream
+=======
+import frc.robot.subsystems.Pivot.Pivot;
+import frc.robot.subsystems.Pivot.PivotConstants;
+>>>>>>> Stashed changes
 
 public class SuperStructure extends SubsystemBase {
 
@@ -104,7 +110,7 @@ public class SuperStructure extends SubsystemBase {
   }
 
   public Command setElevatorToScore(){
-    return new InstantCommand(() -> elevator.setPositionMetersMM(elevatorTargetHeight));
+    return new InstantCommand(() -> elevator.setPositionMetersMM(ElevatorConstants.bargeScore));
   }
 
   public boolean isElevatorAtGoal(){
@@ -131,7 +137,38 @@ public class SuperStructure extends SubsystemBase {
   }
 
   public Command stopElevator() {
+<<<<<<< Updated upstream
     return new InstantCommand(() -> elevator.setOpenLoop(0));
+=======
+    return new InstantCommand(() -> elevator.setOpenLoop(0.05));
+  }
+
+  public Command stopPivot() {
+    return new InstantCommand(() -> pivot.setOpenLoop(-.020));
+  }
+  public Command goPivot() {
+    return new InstantCommand(() -> pivot.setOpenLoop(-0.2));
+  }
+  public Command intakePivot() {
+    return new InstantCommand(() -> pivot.setAnglePosition(PivotConstants.intake));
+  }
+  public Command setPivotToScore(){
+    return new InstantCommand(() -> pivot.setAnglePosition(PivotConstants.ALGAE));
+  }
+  public Command noPivot() {
+    return new InstantCommand(() -> pivot.setOpenLoop(0.2));
+  }
+
+  
+  public Command stopIntake() {
+    return new InstantCommand(() -> intake.setOpenLoop(.05));
+  }
+  public Command outIntake() {
+    return new InstantCommand(() -> intake.setOpenLoop(-.75));
+  }
+  public Command goIntake() {
+    return new InstantCommand(() -> intake.setOpenLoop(.5));
+>>>>>>> Stashed changes
   }
 
   public Command setMiddlePos() {
