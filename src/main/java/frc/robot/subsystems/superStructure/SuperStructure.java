@@ -4,124 +4,27 @@
 
 package frc.robot.subsystems.superStructure;
 
-import org.littletonrobotics.junction.Logger;
-
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.subsystems.Elevator.Elevator;
 import frc.robot.subsystems.Elevator.ElevatorConstants;
 import frc.robot.subsystems.Intake.Intake;
-// import frc.robot.subsystems.Mechanism.SuperStructureMechanism;
 import frc.robot.subsystems.Pivot.Pivot;
+import frc.robot.subsystems.Pivot.PivotConstants;
 
 public class SuperStructure extends SubsystemBase {
 
   private final Elevator elevator = new Elevator ();
   private final Pivot pivot = new Pivot();
   private final Intake intake = new Intake();
-  
+  private final int deafualtWait = 10;
 
-  // private final SuperStructureMechanism mech = new SuperStructureMechanism();
-
-  private enum scoreTarget{
-    Lower,
-    Upper,
-    ALGAE
-  };
-
-  private scoreTarget currentTarget = scoreTarget.Lower;
-
-  private double pivotTargetAngle = 0.0;
-  private double elevatorTargetHeight = 0.0;
-
-  private boolean algaeNext = false;
-  
-  /** Creates a new Superstructure. */
-  public SuperStructure() {}
-
-  @Override
-  public void periodic() {
-    SmartDashboard.putString("Score Target", currentTarget.toString());
-    
-    // This method will be called once per scheduler run
-    elevator.periodic();
-    // mech.update(elevator.getPositionMeters());
-    elevatorTargetHeight = getScoreTargetElevatorPos();
-
-    Logger.recordOutput("Superstructure/ Score Target", currentTarget.toString());
-    Logger.recordOutput("Superstructure/ Elevator Target Height", elevatorTargetHeight);
-    Logger.recordOutput("Superstructure/ Arm Target Angle", pivotTargetAngle);
-    Logger.recordOutput("Superstructure/ Algae Next", algaeNext);
-
-    SmartDashboard.putNumber("Elevator Target Height", elevatorTargetHeight);
-    SmartDashboard.putNumber("Arm Target Angle", pivotTargetAngle);
-    SmartDashboard.putBoolean("Algae NEXT", algaeNext);
-  }
-
-  public Command setAlgaeNext(){
-    return new InstantCommand(() -> algaeNext = true);
-  }
-
-  public Command setAlgaeNextOFF(){
-    return new InstantCommand(() -> algaeNext = false);
-  }
-
-  public boolean getAgaeState(){
-    return algaeNext;
-  }
-
-  public boolean elevatorAtGoal(){
-    return elevator.atGoal();
-  }
-
-  public Command setTargetL1(){
-    return runOnce(() -> currentTarget = scoreTarget.Lower);
-  }
-
-  public Command setTargetL2(){
-    return runOnce(() -> currentTarget = scoreTarget.Upper);
-  }
-
-  public Command setTargetAlgae(){
-    return runOnce(() -> currentTarget = scoreTarget.ALGAE);
-  }
-
-
-  public double getScoreTargetElevatorPos(){
-    double scoreTarget = 0.0;
-
-    switch(currentTarget){
-      case Lower:
-        scoreTarget = ElevatorConstants.reefLower;
-      break;
-      case Upper:
-        scoreTarget = ElevatorConstants.reefUpper;
-      break;
-      case ALGAE:
-      scoreTarget = ElevatorConstants.ALGAE;
-      break;                  
-    }
-    
-    return scoreTarget;
-  }
-
+  // Elevator Commands
   public Command setElevatorToScore(){
-    return new InstantCommand(() -> elevator.setPositionMetersMM(elevatorTargetHeight));
-  }
-
-  public boolean isElevatorAtGoal(){
-    return elevator.atGoal();
-  }
-
-  public boolean isElevatorSafe(){
-    return elevator.belowHalf();
-  }
-
-  public boolean isElevatorBelowHalf(){
-    return elevator.belowHalf();
+    return new InstantCommand(() -> elevator.setPositionMetersMM(ElevatorConstants.barge));
   }
 
   public Command setElevatorToScoreSafe(){
@@ -139,6 +42,7 @@ public class SuperStructure extends SubsystemBase {
     return new InstantCommand(() -> elevator.setOpenLoop(0.05));
   }
 
+  // Pivot Commands
   public Command stopPivot() {
     return new InstantCommand(() -> pivot.setOpenLoop(-.020));
   }
@@ -148,8 +52,14 @@ public class SuperStructure extends SubsystemBase {
   public Command noPivot() {
     return new InstantCommand(() -> pivot.setOpenLoop(0.2));
   }
+  public Command setPivotToScore() {
+    return new InstantCommand(() -> pivot.setAnglePosition(PivotConstants.bargeScore));
+  }
+  public Command setPivotIntake() {
+    return new InstantCommand(() -> pivot.setAnglePosition(PivotConstants.intakePos));
+  }
 
-  
+  // Instake Comands
   public Command stopIntake() {
     return new InstantCommand(() -> intake.setOpenLoop(.05));
   }
@@ -160,17 +70,33 @@ public class SuperStructure extends SubsystemBase {
     return new InstantCommand(() -> intake.setOpenLoop(.5));
   }
 
-  public Command setMiddlePos() {
-     return new InstantCommand(() -> elevator.setPositionMetersMM(0.85));
- }
-
- public Command setHighPos(){
-  return new InstantCommand(() -> elevator.setPositionMeters(1));
- }  
-
+ // Home/Stored Commands
  public Command setElevatorHome(){
   return new InstantCommand(() -> elevator.setPositionMetersMM(0.007));
  }  
+
+ public Command setPivotStored(){
+  return new InstantCommand(() -> pivot.setAnglePosition(PivotConstants.stored));
+ }
+
+ // Multi Stage sequence commands
+ public Command bargeScoreCommand = Commands.sequence(
+  setPivotToScore(),
+  setElevatorToScore(),
+  new WaitCommand(deafualtWait),
+  outIntake(),
+  setElevatorHome(),
+  setPivotStored()
+ );
+
+ public Command floorIntakeCommand = Commands.sequence(
+  setElevatorHome(),
+  setPivotIntake(),
+  goIntake(),
+  new WaitCommand(deafualtWait),
+  stopIntake(),
+  setPivotStored()
+ );
 
 }
 

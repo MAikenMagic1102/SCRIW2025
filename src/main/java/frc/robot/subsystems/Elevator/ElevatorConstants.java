@@ -48,6 +48,7 @@ import edu.wpi.first.units.measure.Distance;
     public static double ALGAE = 0.32;
     public static double idle = 0;
     public static double safePos = 0.25;
+    public static double barge = 0.005;
 
     public static double driveSpeed = 1.0;
 

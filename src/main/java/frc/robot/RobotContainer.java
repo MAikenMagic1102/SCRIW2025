@@ -11,25 +11,24 @@ import com.ctre.phoenix6.swerve.SwerveRequest;
 
 
 import choreo.auto.AutoChooser;
-import choreo.auto.AutoFactory;
-import edu.wpi.first.math.geometry.Rotation2d;
+// import choreo.auto.AutoFactory;
+// import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
+// import edu.wpi.first.wpilibj2.command.Commands;
+// import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
-import frc.robot.commands.PrepScore;
 
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.Elevator.Elevator;
 import frc.robot.subsystems.Intake.Intake;
 import frc.robot.subsystems.superStructure.SuperStructure;
-import frc.robot.subsystems.Intake.Intake;
+// import frc.robot.subsystems.Intake.Intake;
 import frc.robot.subsystems.Pivot.Pivot;
-import frc.robot.subsystems.Intake.IntakeConstants;
-import frc.robot.subsystems.Pivot.PivotConstants;
+// import frc.robot.subsystems.Intake.IntakeConstants;
+// import frc.robot.subsystems.Pivot.PivotConstants;
 
 
 public class RobotContainer {
@@ -92,24 +91,15 @@ public class RobotContainer {
         RobotModeTriggers.disabled().whileTrue(
             drivetrain.applyRequest(() -> idle).ignoringDisable(true)
         );
-        //joystick.a().whileTrue(drivetrain.applyRequest(() -> brake));
-        // joystick.b().whileTrue(drivetrain.applyRequest(() ->
-        //     point.withModuleDirection(new Rotation2d(-joystick.getLeftY(), -joystick.getLeftX()))
-        // ));
 
-
-        // joystick.b().onTrue(superStructure.setTargetL1().andThen(new PrepScore(superStructure)));
-        // joystick.a().onTrue(superstructure.setTargetL2().andThen(new PrepScore(superstructure, coralGripper, coralIntake)));
-        // joystick.x().onTrue(superstructure.setTargetL3().andThen(new PrepScore(superstructure, coralGripper, coralIntake)));
-        
-        // joystick.x().onTrue(superStructure.setElevatorToScore());
-        // joystick.y().onTrue(superStructure.setTargetL1());
         joystick.b().onTrue(superStructure.runElevatorUp()).onFalse(superStructure.stopElevator());
         joystick.y().onTrue(superStructure.runElevatorDown()).onFalse(superStructure.stopElevator());
         joystick.x().onTrue(superStructure.goIntake()).onFalse(superStructure.stopIntake());
         joystick.leftBumper().onTrue(superStructure.outIntake()).onFalse(superStructure.stopIntake());
         joystick.a().onTrue(superStructure.goPivot()).onFalse(superStructure.stopPivot());
         joystick.rightBumper().onTrue(superStructure.noPivot()).onFalse(superStructure.stopPivot());
+        joystick.leftTrigger().onTrue(superStructure.bargeScoreCommand).onFalse(superStructure.setElevatorHome());
+        joystick.rightTrigger().onTrue(superStructure.floorIntakeCommand).onFalse(superStructure.setElevatorHome());
      
 
         // joystick.a().onTrue(superStructure.setTargetL1().andThen(new PrepScore(superStructure, intake, pivot)));
