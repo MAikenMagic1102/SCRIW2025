@@ -23,19 +23,20 @@ public class PivotConstants {
     public static int motorID = 40;
     public static int cancoderID = 311;
 
-    public static double armGearing = 89.83;
-    public static double armGearingCANcoder = 3.5;
-    public static double armRotorToSensor = 25.67;
-    public static double armLength = Units.inchesToMeters(25);
-    public static double armMass = Units.lbsToKilograms(5.0);
-    public static double armMinAngle = Units.degreesToRadians(-255.0);
-    public static double armMaxAngle = Units.degreesToRadians(255.0);
-    public static double armStartingAngle = Units.degreesToRadians(0.0);
+    public static double pivotGearing = 56;
+    public static double pivotGearingCANcoder = 56;
+    // public static double pivotRotorToSensor = 25.67;
+    public static double pivotLength = Units.inchesToMeters(25);
+    public static double pivotMass = Units.lbsToKilograms(5.0);
+    public static double pivotMinAngle = Units.degreesToRadians(-255.0);
+    public static double pivotMaxAngle = Units.degreesToRadians(255.0);
+    public static double pivotStartingAngle = Units.degreesToRadians(0.0);
 
     public static double positionTolerence = 7.0;
 
     public static double driveSpeed = 1.0;
 
+    public static double intake = -100;
     public static double lowerReef = -275; //85;
     public static double upperReef = -256; //110;
     public static double ALGAE = -245;
@@ -48,31 +49,32 @@ public class PivotConstants {
         )  
         .withMotorOutput(
             new MotorOutputConfigs()
-                .withNeutralMode(NeutralModeValue.Brake)
+                .withNeutralMode(NeutralModeValue.Coast)
           )   
           //10:70 - 18:66 S - 10:35
-        .withFeedback(
-            new FeedbackConfigs()
-                .withSensorToMechanismRatio(3.5)
-                // .withFeedbackRemoteSensorID(cancoderID)
-                .withRotorToSensorRatio(25.67)
-                .withFeedbackSensorSource(FeedbackSensorSourceValue.FusedCANcoder)
-        )
-        .withSlot0(
+        // .withFeedback(
+        //     new FeedbackConfigs()
+        //         .withSensorToMechanismRatio(3.5)
+        //         // .withFeedbackRemoteSensorID(cancoderID)
+        //         .withRotorToSensorRatio(25.67)
+        //         .withFeedbackSensorSource(FeedbackSensorSourceValue.FusedCANcoder)
+        // )
+        .withSlot0( // PID tuning
             new Slot0Configs()
                 .withKG(0.38)
                 .withKD(0)
+                //90 dg, str, fll rst bpos
                 .withKP(60.0)
                 .withKV(0.5)
         );
 
-    public static CANcoderConfiguration ccconfig = new CANcoderConfiguration()
-        .withMagnetSensor(
-            new MagnetSensorConfigs()
-                .withAbsoluteSensorDiscontinuityPoint(0.0)
-                .withMagnetOffset(-0.87)
-                //.withMagnetOffset(1.32)
-                .withSensorDirection(SensorDirectionValue.CounterClockwise_Positive)
-        );
+    // public static CANcoderConfiguration ccconfig = new CANcoderConfiguration()
+    //     .withMagnetSensor(
+    //         new MagnetSensorConfigs()
+    //             .withAbsoluteSensorDiscontinuityPoint(0.0)
+    //             .withMagnetOffset(-0.87)
+    //             //.withMagnetOffset(1.32)
+    //             .withSensorDirection(SensorDirectionValue.CounterClockwise_Positive)
+        // );
 
 }
