@@ -17,13 +17,13 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
-import frc.robot.commands.PrepScore;
+
 
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
+import frc.robot.subsystems.Elevator.Elevator;
 import frc.robot.subsystems.Intake.Intake;
 import frc.robot.subsystems.superStructure.SuperStructure;
 import frc.robot.subsystems.Intake.Intake;
@@ -57,6 +57,7 @@ public class RobotContainer {
     public final SuperStructure superStructure = new SuperStructure();
     public final Pivot pivot = new Pivot();
     public final Intake intake = new Intake();
+    public final Elevator elevator = new Elevator();
 
     public RobotContainer() {
         configureBindings();
@@ -103,18 +104,21 @@ public class RobotContainer {
         
         // joystick.x().onTrue(superStructure.setElevatorToScore());
         // joystick.y().onTrue(superStructure.setTargetL1());
-
-        joystick.rightTrigger().onTrue(setToScore).onFalse(superStructure.setElevatorToScoreSafe());
         joystick.b().onTrue(superStructure.runElevatorUp()).onFalse(superStructure.stopElevator());
         joystick.y().onTrue(superStructure.runElevatorDown()).onFalse(superStructure.stopElevator());
         joystick.x().onTrue(superStructure.goIntake()).onFalse(superStructure.stopIntake());
         joystick.leftBumper().onTrue(superStructure.outIntake()).onFalse(superStructure.stopIntake());
+<<<<<<< Updated upstream
+        joystick.a().onTrue(superStructure.goPivot()).onFalse(superStructure.stopPivot());
+=======
         // joystick.a().onTrue(superStructure.goPivot()).onFalse(superStructure.stopPivot());
-        joystick.a().onTrue(superStructure.intakePivot()).onFalse(superStructure.stopPivot());
+        joystick.a().onTrue(superStructure.setPivotToScore()).onFalse(superStructure.stopPivot());
+>>>>>>> Stashed changes
         joystick.rightBumper().onTrue(superStructure.noPivot()).onFalse(superStructure.stopPivot());
+        joystick.povDown().onTrue(superStructure.setElevatorToScore()).onFalse(superStructure.stopElevator());
      
 
-        joystick.a().onTrue(superStructure.setTargetL1().andThen(new PrepScore(superStructure, intake, pivot)));
+        // joystick.a().onTrue(superStructure.setTargetL1().andThen(new PrepScore(superStructure, intake, pivot)));
         
         // joystick.leftTrigger().onTrue(superStructure.bargeScoreCommand);
         // TODO: fix ur friggin keybinds to make dem les scuffed and les conflicty
@@ -131,11 +135,6 @@ public class RobotContainer {
 
         drivetrain.registerTelemetry(logger::telemeterize);
     }
-
-    ParallelCommandGroup setToScore = new ParallelCommandGroup(
-        superStructure.setElevatorToScore(),
-        superStructure.setPivotToScore()
-    );
 
     public Command getAutonomousCommand() {
         /* Run the routine selected from the auto chooser */

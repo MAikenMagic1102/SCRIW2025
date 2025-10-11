@@ -126,6 +126,8 @@ public class Elevator extends SubsystemBase {
     Logger.recordOutput(rightMotorLoggerPath + "/Voltage", motorR.getMotorVoltage().getValueAsDouble());
     Logger.recordOutput(rightMotorLoggerPath + "/Stator Current", motorR.getStatorCurrent().getValueAsDouble());
     Logger.recordOutput(rightMotorLoggerPath + "/Temp", motorR.getDeviceTemp().getValueAsDouble());
+
+    SmartDashboard.putNumber("Elevator Height", getPositionMeters());
   }
 
   @Override
@@ -154,16 +156,6 @@ public class Elevator extends SubsystemBase {
   public boolean upperReef(){
     return getPositionMeters() > 0.24;
   }
-
-  
-  public boolean processor(){
-    return getPositionMeters() > 0.24;
-  }
-  
-  public boolean bargeScore(){
-    return getPositionMeters() > 0.24;
-  }
-
   public boolean aboveHalf(){
     return getPositionMeters() > 0.5;
   }

@@ -15,30 +15,44 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.sim.CANcoderSimState;
 import com.ctre.phoenix6.sim.TalonFXSimState;
 
+import static edu.wpi.first.units.Units.Meters;
+import static edu.wpi.first.units.Units.MetersPerSecond;
+import static edu.wpi.first.units.Units.Radians;
+import static edu.wpi.first.units.Units.RadiansPerSecond;
+import static edu.wpi.first.units.Units.Second;
+
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.units.measure.Angle;
+import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.simulation.BatterySim;
 import edu.wpi.first.wpilibj.simulation.RoboRioSim;
 import edu.wpi.first.wpilibj.simulation.SingleJointedArmSim;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.Elevator.ElevatorConstants;
 
 public class Pivot extends SubsystemBase {
-  private TalonFX armMotor;
+  private TalonFX pivotMotor;
+<<<<<<< Updated upstream
   private TalonFXSimState motorSim;
+  private CANcoderSimState cancoderSim;
+=======
+  // private TalonFXSimState motorSim;
   // private CANcoderSimState cancoderSim;
+>>>>>>> Stashed changes
 
-  // private CANcoder armCaNcoder;
+  private static CANcoder pivotCaNcoder;
 
-  private DCMotor armGearbox = DCMotor.getKrakenX60(1);
+  private DCMotor pivotGearbox = DCMotor.getKrakenX60(1);
 
+<<<<<<< Updated upstream
   private SingleJointedArmSim armSim = 
     new SingleJointedArmSim(
-      armGearbox,
+      pivotGearbox,
       PivotConstants.pivotGearing,
       SingleJointedArmSim.estimateMOI(PivotConstants.pivotLength, PivotConstants.pivotMass),
       PivotConstants.pivotLength,
@@ -46,10 +60,22 @@ public class Pivot extends SubsystemBase {
       PivotConstants.pivotMaxAngle,
       true,
       PivotConstants.pivotStartingAngle);
+=======
+    // private SingleJointeSim armSim = 
+    //  new SingleJointedArmSim(
+    //   armGearbox,
+    //   PivotConstants.pivotGearing,
+    //   SingleJointedArmSim.estimateMOI(PivotConstants.pivotLength, PivotConstants.pivotMass),
+    //   PivotConstants.pivotLength,
+    //   PivotConstants.pivotMinAngle,
+    //   PivotConstants.pivotMaxAngle,
+    //   true,
+    //   PivotConstants.pivotStartingAngle);
+>>>>>>> Stashed changes
 
   private DutyCycleOut dutyOut = new DutyCycleOut(0);
   private PositionVoltage posVoltage = new PositionVoltage(0).withSlot(0);
-  private MotionMagicVoltage mmVoltage = new MotionMagicVoltage(0).withSlot(0);
+  private MotionMagicVoltage mmPosition = new MotionMagicVoltage(0).withSlot(0);
 
   boolean closedLoop = false;
 
@@ -60,43 +86,53 @@ public class Pivot extends SubsystemBase {
   private final String motorLoggerPath = loggerPath + "/Motor";
 /** Creates a new Arm. */
   public Pivot() {
-    armMotor = new TalonFX(PivotConstants.motorID, PivotConstants.busname);
+    pivotMotor = new TalonFX(PivotConstants.motorID, PivotConstants.busname);
+<<<<<<< Updated upstream
+    pivotCaNcoder = new CANcoder(PivotConstants.cancoderID, PivotConstants.busname);
+=======
     // armCaNcoder = new CANcoder(PivotConstants.cancoderID, PivotConstants.busname);
+>>>>>>> Stashed changes
 
     /* Retry config apply up to 5 times, report if failure */
     StatusCode status = StatusCode.StatusCodeNotInitialized;
     for (int i = 0; i < 5; ++i) {
-      status = armMotor.getConfigurator().apply(PivotConstants.config);
+      status = pivotMotor.getConfigurator().apply(PivotConstants.config);
       if (status.isOK()) break;
     }
     if(!status.isOK()) {
       System.out.println("Could not apply configs, error code: " + status.toString());
     }
 
-    // /* Retry config apply up to 5 times, report if failure */
-    // StatusCode ccstatus = StatusCode.StatusCodeNotInitialized;
-    // for (int i = 0; i < 5; ++i) {
-    //   ccstatus = armCaNcoder.getConfigurator().apply(PivotConstants.ccconfig);
-    //   if (ccstatus.isOK()) break;
-    // }
-    // if(!ccstatus.isOK()) {
-    //   System.out.println("Could not apply configs, error code: " + ccstatus.toString());
-    // }
+    /* Retry config apply up to 5 times, report if failure */
+    StatusCode ccstatus = StatusCode.StatusCodeNotInitialized;
+    for (int i = 0; i < 5; ++i) {
+      ccstatus = pivotCaNcoder.getConfigurator().apply(PivotConstants.ccconfig);
+      if (ccstatus.isOK()) break;
+    }
+    if(!ccstatus.isOK()) {
+      System.out.println("Could not apply configs, error code: " + ccstatus.toString());
+    }
 
     //armMotor.setPosition(armCaNcoder.getAbsolutePosition().getValueAsDouble() / ArmConstants.armRotorToSensor);
-    motorSim = armMotor.getSimState();
+<<<<<<< Updated upstream
+    motorSim = pivotMotor.getSimState();
+    cancoderSim = pivotCaNcoder.getSimState();
+    pivotCaNcoder.setPosition(0);
+=======
+    // motorSim = pivotMotor.getSimState();
     // cancoderSim = armCaNcoder.getSimState();
     // armCaNcoder.setPosition(0);
+>>>>>>> Stashed changes
   }
 
   @Override
   public void periodic() {
 
-    // if(armAtScoring()){
-    //   PivotConstants.driveSpeed = 0.15;
-    // }else{
-    //   PivotConstants.driveSpeed = 1.0;
-    // }
+    if(pivotAtScoring()){
+      PivotConstants.driveSpeed = 0.15;
+    }else{
+      PivotConstants.driveSpeed = 1.0;
+    }
     // This method will be called once per scheduler run
 
 
@@ -104,24 +140,30 @@ public class Pivot extends SubsystemBase {
     Logger.recordOutput(loggerPath + "/Angle", getAngleDegrees());
     Logger.recordOutput(loggerPath + "/At Goal", atGoal());
 
-    Logger.recordOutput(motorLoggerPath + "/Motor Voltage", armMotor.getMotorVoltage().getValueAsDouble());
-    Logger.recordOutput(motorLoggerPath + "/Stator Current", armMotor.getStatorCurrent().getValueAsDouble());
-    Logger.recordOutput(motorLoggerPath + "/Motor Temp", armMotor.getDeviceTemp().getValueAsDouble());
+    Logger.recordOutput(motorLoggerPath + "/Motor Voltage", pivotMotor.getMotorVoltage().getValueAsDouble());
+    Logger.recordOutput(motorLoggerPath + "/Stator Current", pivotMotor.getStatorCurrent().getValueAsDouble());
+    Logger.recordOutput(motorLoggerPath + "/Motor Temp", pivotMotor.getDeviceTemp().getValueAsDouble());
+<<<<<<< Updated upstream
+=======
+
+    SmartDashboard.putNumber("Pivot Angle", getAngleDegrees());
+>>>>>>> Stashed changes
     
     if(closedLoop){
-      Logger.recordOutput("Arm/ Setpoint", armMotor.getClosedLoopReference().getValueAsDouble());
+      Logger.recordOutput("Arm/ Setpoint", pivotMotor.getClosedLoopReference().getValueAsDouble());
     }
   }
 
-  public boolean pivotHalfScored(){
-    return getAngleDegrees() < -100;
+  public boolean atGoal() {
+    return Math.abs(targetPosition - getPositionMeters()) < PivotConstants.positionTolerence;
   }
 
+<<<<<<< Updated upstream
   @Override
   public void simulationPeriodic() {
     // This method will be called once per scheduler run
     motorSim.setSupplyVoltage(RobotController.getBatteryVoltage());
-    // cancoderSim.setSupplyVoltage(RobotController.getBatteryVoltage());
+    cancoderSim.setSupplyVoltage(RobotController.getBatteryVoltage());
     
     armSim.setInput(motorSim.getMotorVoltage());
 
@@ -131,35 +173,113 @@ public class Pivot extends SubsystemBase {
         BatterySim.calculateDefaultBatteryLoadedVoltage(armSim.getCurrentDrawAmps()));
 
     motorSim.setRawRotorPosition(Units.radiansToRotations(armSim.getAngleRads()) * PivotConstants.pivotGearing);
-    // cancoderSim.setRawPosition(Units.radiansToRotations(armSim.getAngleRads()) * PivotConstants.armGearingCANcoder);
+    cancoderSim.setRawPosition(Units.radiansToRotations(armSim.getAngleRads()) * PivotConstants.pivotGearingCANcoder);
   }
 
-  public double getAngleDegrees(){
-    // return Units.rotationsToDegrees(armCaNcoder.getPosition().getValueAsDouble() / PivotConstants.armGearingCANcoder);
+  public static double getAngleDegrees(){
+    return Units.rotationsToDegrees(pivotCaNcoder.getPosition().getValueAsDouble() / PivotConstants.pivotGearingCANcoder);
   }
 
-  public boolean armAtScoring(){
+  public boolean pivotAtScoring(){
     return getAngleDegrees() < -180;
   }
 
-  public boolean armAtHome(){
+  public boolean pivotAtHome(){
+    Pivot.getAngleDegrees();
     return getAngleDegrees() > -8 && getAngleDegrees() < 8;
+=======
+  public boolean reefLower(){
+    return getAngleDegrees() > 0.24;
   }
+
+  public boolean reefUpper(){
+    return getAngleDegrees() > 0.24;
+  }
+
   
+  public boolean processor(){
+    return getAngleDegrees() > 0.24;
+>>>>>>> Stashed changes
+  }
+
+    public Command pivotAtHome_CMD(){
+        return Commands.run(() ->pivotAtHome());
+    }
+  
+<<<<<<< Updated upstream
   public boolean atGoal(){
     return Math.abs(targetPosition - getAngleDegrees()) < PivotConstants.positionTolerence;
+    
+=======
+  public boolean bargeScore(){
+    return getAngleDegrees() > 0.24;
+>>>>>>> Stashed changes
   }
+
+
+
+
+  public void setPositionMeters(double height) {
+    targetPosition = height;
+    posVoltage.withPosition(height / PivotConstants.pivotGearing).withEnableFOC(true);
+    pivotMotor.setControl(posVoltage);
+  }
+ 
+  public void setPositionMetersMM(double height) {
+    targetPosition = height;
+    mmPosition.withPosition(height / PivotConstants.pivotGearing).withEnableFOC(true);
+    pivotMotor.setControl(mmPosition);
+  }
+
+
+  // public boolean pivotHalfScored(){
+  //   return getAngleDegrees() < -100;
+  // }
+
+  // @Override
+  // public void simulationPeriodic() {
+  //   // This method will be called once per scheduler run
+  //   motorSim.setSupplyVoltage(RobotController.getBatteryVoltage());
+  //   // cancoderSim.setSupplyVoltage(RobotController.getBatteryVoltage());
+    
+    // armSim.setInput(motorSim.getMotorVoltage());
+
+    // armSim.update(0.020);
+
+  //   RoboRioSim.setVInVoltage(
+  //   //     BatterySim.calculateDefaultBatteryLoadedVoltage(armSim.getCurrentDrawAmps()));
+
+  //   // motorSim.setRawRotorPosition(Units.radiansToRotations(armSim.getAngleRads()) * PivotConstants.pivotGearing);
+  //   // cancoderSim.setRawPosition(Units.radiansToRotations(armSim.getAngleRads()) * PivotConstants.armGearingCANcoder);
+  // }
+
+  public double getAngleDegrees(){
+    return Units.rotationsToDegrees(pivotMotor.getPosition().getValueAsDouble());
+  }
+
+  // public boolean armAtScoring(){
+  //   return getAngleDegrees() < -180;
+  // }
+
+  // public boolean armAtHome(){
+  //   return getAngleDegrees() > -8 && getAngleDegrees() < 8;
+  // }
+  
+  // public boolean atGoal(){
+  //   return Math.abs(targetPosition - getAngleDegrees()) < PivotConstants.positionTolerence;
+  // }
 
   public void setOpenLoop(double demand){
     dutyOut.withOutput(demand);
-    armMotor.setControl(dutyOut);
+    pivotMotor.setControl(dutyOut);
     closedLoop = false;
   }
+  
 
   public void setAnglePosition(double angle){
     targetPosition = angle;
     posVoltage.withPosition(Units.degreesToRotations(angle));
-    armMotor.setControl(posVoltage);
+    pivotMotor.setControl(posVoltage);
     closedLoop = true;
   }
   
@@ -171,6 +291,15 @@ public class Pivot extends SubsystemBase {
   public Command  setAngleCommand(double angle){
     return runOnce(() -> setAngle(angle));
   }
-  
+  public double getPositionMeters() {
+    return rotationsToMeters(pivotMotor.getRotorPosition().getValue()).in(Meters);
+  }
 
+  
+  public static Distance rotationsToMeters(Angle rotations) {
+    /* Apply gear ratio to input rotations */
+    var gearedRadians = rotations.in(Radians) / ElevatorConstants.elevatorGearing;
+    /* Then multiply the wheel radius by radians of rotation to get distance */
+    return ElevatorConstants.elevatorPullyRadiusDistance.times(gearedRadians);
+  }
 }
