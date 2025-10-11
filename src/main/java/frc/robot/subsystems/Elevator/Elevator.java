@@ -156,6 +156,16 @@ public class Elevator extends SubsystemBase {
   public boolean upperReef(){
     return getPositionMeters() > 0.24;
   }
+
+  
+  public boolean processor(){
+    return getPositionMeters() > 0.24;
+  }
+  
+  public boolean bargeScore(){
+    return getPositionMeters() > 0.24;
+  }
+
   public boolean aboveHalf(){
     return getPositionMeters() > 0.5;
   }
