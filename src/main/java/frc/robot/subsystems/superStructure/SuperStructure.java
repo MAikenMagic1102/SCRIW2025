@@ -10,21 +10,28 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.Elevator.Elevator;
 import frc.robot.subsystems.Elevator.ElevatorConstants;
 import frc.robot.subsystems.Intake.Intake;
 // import frc.robot.subsystems.Mechanism.SuperStructureMechanism;
 import frc.robot.subsystems.Pivot.Pivot;
+<<<<<<< Updated upstream
+=======
 import frc.robot.subsystems.Pivot.PivotConstants;
-
+>>>>>>> Stashed changes
 
 public class SuperStructure extends SubsystemBase {
 
   private final Elevator elevator = new Elevator ();
+<<<<<<< Updated upstream
+  private final Pivot pivot = new Pivot();
+  private final Intake intake = new Intake();
+  
+=======
   private final Intake intake = new Intake();
   private final Pivot pivot = new Pivot();
+>>>>>>> Stashed changes
 
   // private final SuperStructureMechanism mech = new SuperStructureMechanism();
 
@@ -111,7 +118,7 @@ public class SuperStructure extends SubsystemBase {
   }
   //TODO: xjncdjdxnjdj
   public Command setElevatorToScore(){
-    return new InstantCommand(() -> elevator.setPositionMetersMM(ElevatorConstants.bargeScore));
+    return new InstantCommand(() -> elevator.setPositionMetersMM(elevatorTargetHeight));
   }
 
   public boolean isElevatorAtGoal(){
@@ -147,17 +154,12 @@ public class SuperStructure extends SubsystemBase {
   public Command goPivot() {
     return new InstantCommand(() -> pivot.setOpenLoop(-0.2));
   }
+<<<<<<< Updated upstream
+=======
   public Command setPivotToScore(){
     return new InstantCommand(() -> pivot.setAnglePosition(PivotConstants.reefUpper));
   }
-
-  public Command intakePivot() {
-    return new InstantCommand(() -> pivot.setAnglePosition(PivotConstants.intake));
-  }
-  public Command setPivotToScore(){
-    return new InstantCommand(() -> pivot.setAnglePosition(PivotConstants.ALGAE));
-  }
-
+>>>>>>> Stashed changes
   public Command noPivot() {
     return new InstantCommand(() -> pivot.setOpenLoop(0.2));
   }
@@ -171,7 +173,6 @@ public class SuperStructure extends SubsystemBase {
   }
   public Command goIntake() {
     return new InstantCommand(() -> intake.setOpenLoop(.5));
-
   }
 
   public Command setMiddlePos() {
