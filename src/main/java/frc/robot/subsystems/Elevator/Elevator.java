@@ -126,6 +126,8 @@ public class Elevator extends SubsystemBase {
     Logger.recordOutput(rightMotorLoggerPath + "/Voltage", motorR.getMotorVoltage().getValueAsDouble());
     Logger.recordOutput(rightMotorLoggerPath + "/Stator Current", motorR.getStatorCurrent().getValueAsDouble());
     Logger.recordOutput(rightMotorLoggerPath + "/Temp", motorR.getDeviceTemp().getValueAsDouble());
+
+    SmartDashboard.putNumber("Elevator Height", getPositionMeters());
   }
 
   @Override

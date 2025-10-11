@@ -19,7 +19,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
-import frc.robot.commands.PrepScore;
+
 
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
@@ -108,8 +108,14 @@ public class RobotContainer {
         joystick.y().onTrue(superStructure.runElevatorDown()).onFalse(superStructure.stopElevator());
         joystick.x().onTrue(superStructure.goIntake()).onFalse(superStructure.stopIntake());
         joystick.leftBumper().onTrue(superStructure.outIntake()).onFalse(superStructure.stopIntake());
+<<<<<<< Updated upstream
         joystick.a().onTrue(superStructure.goPivot()).onFalse(superStructure.stopPivot());
+=======
+        // joystick.a().onTrue(superStructure.goPivot()).onFalse(superStructure.stopPivot());
+        joystick.a().onTrue(superStructure.setPivotToScore()).onFalse(superStructure.stopPivot());
+>>>>>>> Stashed changes
         joystick.rightBumper().onTrue(superStructure.noPivot()).onFalse(superStructure.stopPivot());
+        joystick.povDown().onTrue(superStructure.setElevatorToScore()).onFalse(superStructure.stopElevator());
      
 
         // joystick.a().onTrue(superStructure.setTargetL1().andThen(new PrepScore(superStructure, intake, pivot)));

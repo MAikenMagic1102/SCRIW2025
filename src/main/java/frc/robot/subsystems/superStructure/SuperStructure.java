@@ -16,13 +16,22 @@ import frc.robot.subsystems.Elevator.ElevatorConstants;
 import frc.robot.subsystems.Intake.Intake;
 // import frc.robot.subsystems.Mechanism.SuperStructureMechanism;
 import frc.robot.subsystems.Pivot.Pivot;
+<<<<<<< Updated upstream
+=======
+import frc.robot.subsystems.Pivot.PivotConstants;
+>>>>>>> Stashed changes
 
 public class SuperStructure extends SubsystemBase {
 
   private final Elevator elevator = new Elevator ();
+<<<<<<< Updated upstream
   private final Pivot pivot = new Pivot();
   private final Intake intake = new Intake();
   
+=======
+  private final Intake intake = new Intake();
+  private final Pivot pivot = new Pivot();
+>>>>>>> Stashed changes
 
   // private final SuperStructureMechanism mech = new SuperStructureMechanism();
 
@@ -107,7 +116,7 @@ public class SuperStructure extends SubsystemBase {
     
     return scoreTarget;
   }
-
+  //TODO: xjncdjdxnjdj
   public Command setElevatorToScore(){
     return new InstantCommand(() -> elevator.setPositionMetersMM(elevatorTargetHeight));
   }
@@ -145,6 +154,12 @@ public class SuperStructure extends SubsystemBase {
   public Command goPivot() {
     return new InstantCommand(() -> pivot.setOpenLoop(-0.2));
   }
+<<<<<<< Updated upstream
+=======
+  public Command setPivotToScore(){
+    return new InstantCommand(() -> pivot.setAnglePosition(PivotConstants.reefUpper));
+  }
+>>>>>>> Stashed changes
   public Command noPivot() {
     return new InstantCommand(() -> pivot.setOpenLoop(0.2));
   }
